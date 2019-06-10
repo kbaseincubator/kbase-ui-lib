@@ -1,0 +1,51 @@
+env:
+    browser: true
+    amd: true
+    es6: true
+extends: 
+  - 'eslint:recommended'
+  - 'plugin:react/recommended'
+rules:
+    strict:
+        - error
+        - function
+    indent:
+        - error
+        - 4
+    linebreak-style:
+        - error
+        - unix
+    quotes:
+        - error
+        - single
+    semi:
+        - error
+        - always
+    no-console:
+        - error
+        - allow:
+              - warn
+              - error
+    # stylistic
+    no-trailing-spaces:
+        - error
+    space-before-function-paren:
+        - error
+        - anonymous: always
+          named: never
+          asyncArrow: always
+    space-in-parens:
+        - error
+        - never
+    func-call-spacing:
+        - error
+        - never
+    keyword-spacing:
+        - error
+        - before: true
+          after: true
+    no-fallthrough:
+        - error
+        - commentPattern: fallthrough
+    prefer-const:
+        - error

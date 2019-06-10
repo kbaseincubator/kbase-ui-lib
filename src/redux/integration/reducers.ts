@@ -1,0 +1,31 @@
+import { Action, Reducer } from 'redux';
+import { AppState } from './store';
+import { AppLoadSuccess, ActionType } from './actions';
+import { BaseStoreState } from '../store';
+
+export function appLoadSuccess(state: BaseStoreState, action: AppLoadSuccess): BaseStoreState {
+    return {
+        ...state,
+        app: {
+            status: AppState.READY,
+            config: action.config,
+            runtime: action.runtime
+        }
+    };
+}
+
+const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreState | undefined, action: Action) => {
+    if (!state) {
+        return state;
+    }
+
+    // function reducer(state: BaseStoreState, action: Action): BaseStoreState | null {
+    switch (action.type) {
+        case ActionType.APP_LOAD_SUCCESS:
+            return appLoadSuccess(state, action as AppLoadSuccess);
+        default:
+            return;
+    }
+};
+
+export default reducer;

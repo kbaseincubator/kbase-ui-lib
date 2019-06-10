@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "outDir": "./lib",
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "removeComments": true,
+        "declaration": true,
+        "sourceMap": true,
+        "jsx": "react",
+        "typeRoots": ["index.d.ts", "node_modules/@types"],
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
+    },
+    "include": ["./src/**/*.tsx", "./src/**/*.ts"],
+    "exclude": ["node_modules", "*.test.*"]
+}

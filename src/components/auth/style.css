@@ -1,0 +1,41 @@
+.Auth {
+    flex: 1 1 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.Auth-authorized {}
+
+.Auth-unauthorized {
+    color: red;
+    padding: 4px;
+    border: 1px red solid;
+}
+
+.Auth-error {
+    color: red;
+    padding: 4px;
+    border: 1px red solid;
+}
+
+.Auth-form {
+    flex: 0 0 auto;
+    border: 1px blue dotted;
+    padding: 8px;
+}
+
+.Auth-form input {
+    width: 20em
+}
+
+.Auth-toolbar {
+    flex: 0 0 auto;
+    border: 1px blue dotted;
+    padding: 8px;
+}
+
+.Auth-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
