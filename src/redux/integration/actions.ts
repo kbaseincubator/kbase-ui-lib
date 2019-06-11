@@ -6,6 +6,7 @@ import { IFrameIntegration } from '../../lib/IFrameIntegration';
 import { AppConfig, AppStoreState, AppRuntime } from './store';
 import { AppError } from '../store';
 import { Channel } from '../../lib/windowChannel';
+import uuid = require('uuid');
 
 // Action types
 
@@ -53,22 +54,18 @@ export function appLoadError(error: AppError): AppLoadError {
 }
 
 let channel: Channel;
+let fakeIframe: IFrameSimulator;
 
 export function appStart() {
     return (dispatch: ThunkDispatch<AppStoreState, void, Action>, getState: () => AppStoreState) => {
         // check and see if we are in an iframe
-        console.log('here...');
         const integration = new IFrameIntegration();
-        console.log('there...');
         let iframeParams = integration.getParamsFromIFrame();
-        console.log('got params?', iframeParams);
-
-        const frame = window.frameElement;
-        console.log('frame?', frame);
+        let channelId: string;
 
         if (iframeParams) {
             // set up the message bus.
-            let channelId = iframeParams.channelId;
+            channelId = iframeParams.channelId;
 
             channel = new Channel({
                 to: channelId
@@ -81,68 +78,6 @@ export function appStart() {
             //         console.error('Error processing "navigate" message');
             //     }
             // );
-
-            channel.on(
-                'start',
-                (params: any) => {
-                    // console.log('start?', params);
-                    // const urlBase = params.config.deploy.services.urlBase;
-                    // const services = params.config.coreServices;
-                    // const services = params.config.coreServices.reduce((services: any, service: any) => {
-                    //     services[service.module] = service;
-                    //     return services;
-                    // }, {});
-                    // console.log('dispatching...', services.NarrativeJobService);
-                    const services = params.config.services;
-                    dispatch(
-                        appLoadSuccess(
-                            {
-                                baseUrl: '',
-                                services: {
-                                    Groups: {
-                                        url: services.Groups.url
-                                    },
-                                    UserProfile: {
-                                        url: services.UserProfile.url
-                                    },
-                                    Workspace: {
-                                        url: services.Workspace.url
-                                    },
-                                    ServiceWizard: {
-                                        url: services.ServiceWizard.url
-                                    },
-                                    Auth: {
-                                        url: services.Auth.url
-                                    },
-                                    NarrativeMethodStore: {
-                                        url: services.NarrativeMethodStore.url
-                                    },
-                                    Catalog: {
-                                        url: services.Catalog.url
-                                    },
-                                    NarrativeJobService: {
-                                        url: services.NarrativeJobService.url
-                                    }
-                                },
-                                defaultPath: '/'
-                            },
-                            {
-                                channelId
-                            }
-                        )
-                    );
-                },
-                (err: Error) => {
-                    console.error('Error starting...', err);
-                }
-            );
-
-            channel.start();
-
-            channel.send('ready', {
-                channelId: channel.id,
-                greeting: 'heloooo'
-            });
 
             // route from paths passed in from kbase-ui
             // switch (iframeParams.params.view) {
@@ -158,45 +93,102 @@ export function appStart() {
 
             // suck up all the params into our state.
         } else {
-            iframeParams = new IFrameSimulator().getParamsFromIFrame();
-            dispatch(
-                appLoadSuccess(
-                    {
-                        baseUrl: '',
-                        services: {
-                            Groups: {
-                                url: iframeParams.params.groupsServiceURL
-                            },
-                            UserProfile: {
-                                url: iframeParams.params.userProfileServiceURL
-                            },
-                            Workspace: {
-                                url: iframeParams.params.workspaceServiceURL
-                            },
-                            ServiceWizard: {
-                                url: iframeParams.params.serviceWizardURL
-                            },
-                            Auth: {
-                                url: iframeParams.params.authServiceURL
-                            },
-                            NarrativeMethodStore: {
-                                url: iframeParams.params.narrativeMethodStoreURL
-                            },
-                            Catalog: {
-                                url: iframeParams.params.catalogServiceURL
-                            },
-                            NarrativeJobService: {
-                                url: iframeParams.params.narrativeJobServiceURL
-                            }
-                        },
-                        defaultPath: '/'
-                    },
-                    {
-                        channelId: null
-                    }
-                )
-            );
+            const fakeChannelId = uuid.v4();
+            fakeIframe = new IFrameSimulator(fakeChannelId);
+            iframeParams = fakeIframe.getParamsFromIFrame();
+            channelId = iframeParams.channelId;
+            // dispatch(
+            //     appLoadSuccess(
+            //         {
+            //             baseUrl: '',
+            //             services: {
+            //                 Groups: {
+            //                     url: iframeParams.params.groupsServiceURL
+            //                 },
+            //                 UserProfile: {
+            //                     url: iframeParams.params.userProfileServiceURL
+            //                 },
+            //                 Workspace: {
+            //                     url: iframeParams.params.workspaceServiceURL
+            //                 },
+            //                 ServiceWizard: {
+            //                     url: iframeParams.params.serviceWizardURL
+            //                 },
+            //                 Auth: {
+            //                     url: iframeParams.params.authServiceURL
+            //                 },
+            //                 NarrativeMethodStore: {
+            //                     url: iframeParams.params.narrativeMethodStoreURL
+            //                 },
+            //                 Catalog: {
+            //                     url: iframeParams.params.catalogServiceURL
+            //                 },
+            //                 NarrativeJobService: {
+            //                     url: iframeParams.params.narrativeJobServiceURL
+            //                 }
+            //             },
+            //             defaultPath: '/'
+            //         },
+            //         {
+            //             channelId: null
+            //         }
+            //     )
+            // );
         }
+
+        channel.on(
+            'start',
+            (params: any) => {
+                const services = params.config.services;
+                dispatch(
+                    appLoadSuccess(
+                        {
+                            baseUrl: '',
+                            services: {
+                                Groups: {
+                                    url: services.Groups.url
+                                },
+                                UserProfile: {
+                                    url: services.UserProfile.url
+                                },
+                                Workspace: {
+                                    url: services.Workspace.url
+                                },
+                                ServiceWizard: {
+                                    url: services.ServiceWizard.url
+                                },
+                                Auth: {
+                                    url: services.Auth.url
+                                },
+                                NarrativeMethodStore: {
+                                    url: services.NarrativeMethodStore.url
+                                },
+                                Catalog: {
+                                    url: services.Catalog.url
+                                },
+                                NarrativeJobService: {
+                                    url: services.NarrativeJobService.url
+                                }
+                            },
+                            defaultPath: '/'
+                        },
+                        {
+                            channelId
+                        }
+                    )
+                );
+            },
+            (err: Error) => {
+                console.error('Error starting...', err);
+            }
+        );
+
+        channel.start();
+
+        channel.send('ready', {
+            channelId: channel.id,
+            greeting: 'heloooo'
+        });
     };
 }
 

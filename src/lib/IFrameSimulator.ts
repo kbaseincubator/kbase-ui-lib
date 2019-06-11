@@ -37,13 +37,50 @@ class IFrameSimulator {
     params: IFrameParams | null;
     channel: Channel;
 
-    constructor() {
+    constructor(toChannelId: string) {
         this.params = null;
 
         // create a window channel.
 
         this.channel = new Channel({
-            to: 'abc123'
+            to: toChannelId
+        });
+
+        this.channel.on('ready', () => {
+            this.channel.send('start', {
+                token: 'abc', // where to get token from
+                username: 'eapearson', // where to get username from
+                realname: 'Erik A Pearson', // where to get real name from
+                email: 'eapearson@lbl.gov', // where to get email from
+                config: {
+                    services: {
+                        Groups: {
+                            url: '/services/groups'
+                        },
+                        UserProfile: {
+                            url: '/services/user_profile/rpc'
+                        },
+                        Workspace: {
+                            url: '/services/ws'
+                        },
+                        ServiceWizard: {
+                            url: '/services/service_wizard'
+                        },
+                        Auth: {
+                            url: '/services/auth'
+                        },
+                        NarrativeMethodStore: {
+                            url: '/services/narrative_method_store/rpc'
+                        },
+                        Catalog: {
+                            url: '/services/catalog/rpc'
+                        },
+                        NarrativeJobService: {
+                            url: '/services/njs_wrapper'
+                        }
+                    }
+                }
+            });
         });
     }
 
@@ -52,14 +89,14 @@ class IFrameSimulator {
             channelId: this.channel.id,
             frameId: uuid.v4(),
             params: {
-                groupsServiceURL: '/services/groups',
-                userProfileServiceURL: '/services/user_profile/rpc',
-                workspaceServiceURL: '/services/ws',
-                serviceWizardURL: '/services/service_wizard',
-                authServiceURL: '/services/auth',
-                narrativeMethodStoreURL: '/services/narrative_method_store/rpc',
-                catalogServiceURL: '/services/catalog/rpc',
-                narrativeJobServiceURL: '/services/njs_wrapper',
+                // groupsServiceURL: '/services/groups',
+                // userProfileServiceURL: '/services/user_profile/rpc',
+                // workspaceServiceURL: '/services/ws',
+                // serviceWizardURL: '/services/service_wizard',
+                // authServiceURL: '/services/auth',
+                // narrativeMethodStoreURL: '/services/narrative_method_store/rpc',
+                // catalogServiceURL: '/services/catalog/rpc',
+                // narrativeJobServiceURL: '/services/njs_wrapper',
                 originalPath: '',
                 view: null,
                 viewParams: null
