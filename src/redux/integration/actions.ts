@@ -63,6 +63,9 @@ export function appStart() {
         let iframeParams = integration.getParamsFromIFrame();
         console.log('got params?', iframeParams);
 
+        const frame = window.frameElement;
+        console.log('frame?', frame);
+
         if (iframeParams) {
             // set up the message bus.
             let channelId = iframeParams.channelId;
