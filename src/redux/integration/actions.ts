@@ -13,7 +13,8 @@ export enum ActionType {
     APP_LOAD = 'app load',
     APP_LOAD_START = 'app load start',
     APP_LOAD_SUCCESS = 'app load success',
-    APP_LOAD_ERROR = 'app load error'
+    APP_LOAD_ERROR = 'app load error',
+    APP_SEND_MESSAGE = 'app/sendMessage'
 }
 
 // Action Definitions
@@ -190,5 +191,25 @@ export function appStart() {
                 )
             );
         }
+    };
+}
+
+export interface SendMessage {
+    type: ActionType.APP_SEND_MESSAGE;
+    id: string;
+    payload: object;
+}
+
+// export function sendMessage(id: string, payload: object) {
+//     return {
+//         type: ActionType.APP_SEND_MESSAGE,
+//         id,
+//         payload
+//     };
+// }
+
+export function sendMessage(id: string, payload: object) {
+    return (dispatch: ThunkDispatch<AppStoreState, void, Action>, getState: () => AppStoreState) => {
+        channel.send(id, payload);
     };
 }

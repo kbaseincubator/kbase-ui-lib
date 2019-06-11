@@ -1,9 +1,9 @@
 import { Action, Reducer } from 'redux';
 import { AppState } from './store';
-import { AppLoadSuccess, ActionType } from './actions';
+import { AppLoadSuccess, ActionType, sendMessage, SendMessage } from './actions';
 import { BaseStoreState } from '../store';
 
-export function appLoadSuccess(state: BaseStoreState, action: AppLoadSuccess): BaseStoreState {
+function appLoadSuccess(state: BaseStoreState, action: AppLoadSuccess): BaseStoreState {
     return {
         ...state,
         app: {
@@ -23,6 +23,8 @@ const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreSt
     switch (action.type) {
         case ActionType.APP_LOAD_SUCCESS:
             return appLoadSuccess(state, action as AppLoadSuccess);
+        // case ActionType. APP_SEND_MESSAGE:
+        //     return sendMessage(state, action as SendMessage);
         default:
             return;
     }

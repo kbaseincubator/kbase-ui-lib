@@ -3,13 +3,13 @@ import uuid from 'uuid';
 interface ListenerParams {
     name: string;
     onSuccess: (payload: Payload) => void;
-    onError: (error: Error) => void;
+    onError?: (error: Error) => void;
 }
 
 class Listener {
     name: string;
     onSuccess: (payload: Payload) => void;
-    onError: (error: Error) => void;
+    onError?: (error: Error) => void;
 
     constructor({ name, onSuccess, onError }: ListenerParams) {
         this.name = name;
@@ -148,8 +148,17 @@ export class Channel {
         return 'msg_' + String(this.lastId);
     }
 
+    /**
+     * Receives all messages sent via postMessage to the associated window.
+     *
+     * @param messageEvent - a post message event
+     */
     receiveMessage(messageEvent: MessageEvent) {
         const message = messageEvent.data as Message;
+
+        // Here we have a series of filters to determine whether this message should be
+        // handled by this post message bus.
+        // In all cases we issue a warning, and return.
         if (!message) {
             this.unwelcomeReceivedCount++;
             if (this.unwelcomeReceiptWarning) {
@@ -215,9 +224,10 @@ export class Channel {
                 try {
                     listener.onSuccess(message.payload);
                 } catch (ex) {
-                    console.error('Error handling listener for message', message, ex);
                     if (listener.onError) {
                         listener.onError(ex);
+                    } else {
+                        console.error('Error handling listener for message', message, ex);
                     }
                 }
             });
@@ -232,9 +242,10 @@ export class Channel {
                 try {
                     listener.onSuccess(message.payload);
                 } catch (ex) {
-                    console.error('Error handling listener for message', message, ex);
                     if (listener.onError) {
                         listener.onError(ex);
+                    } else {
+                        console.error('Error handling listener for message', message, ex);
                     }
                 }
             });
@@ -248,7 +259,7 @@ export class Channel {
         this.listeners.get(listener.name)!.push(listener);
     }
 
-    on(messageId: string, success: (payload: any) => any, error: (error: Error) => void) {
+    on(messageId: string, success: (payload: any) => any, error?: (error: Error) => void) {
         this.listen(
             new Listener({
                 name: messageId,
@@ -366,6 +377,10 @@ export class Channel {
             sent: this.sentCount,
             received: this.receivedCount
         };
+    }
+
+    setPartner(id: string) {
+        this.partnerId = id;
     }
 
     attach(window: Window) {

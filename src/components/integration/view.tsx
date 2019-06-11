@@ -8,8 +8,26 @@ import './style.css';
 // comm, etc.
 // TODO: auth is separate, but we maybe we should merge them together...
 
+// export interface IFrameParams {
+//     channelId: string;
+//     frameId: string;
+//     params: {
+//         groupsServiceURL: string;
+//         userProfileServiceURL: string;
+//         workspaceServiceURL: string;
+//         serviceWizardURL: string;
+//         authServiceURL: string;
+//         narrativeMethodStoreURL: string;
+//         originalPath: string | null;
+//         view: string | null;
+//         viewParams: any;
+//     };
+//     parentHost: string;
+// }
+
 export interface KBaseIntegrationProps {
     channelId: string | null;
+    // iframeParams: IFrameParams;
 }
 
 interface KBaseIntegrationState {
@@ -18,11 +36,12 @@ interface KBaseIntegrationState {
 
 export default class KBaseIntegration extends React.Component<KBaseIntegrationProps, KBaseIntegrationState> {
     channel: Channel | null;
+    // params: IFrameParams;
 
     constructor(props: KBaseIntegrationProps) {
         super(props);
 
-        // const params = this.getParamsFromIFrame()
+        // this.params = this.getParamsFromIFrame();
 
         this.state = {
             ready: false
@@ -30,6 +49,26 @@ export default class KBaseIntegration extends React.Component<KBaseIntegrationPr
 
         this.channel = null;
     }
+
+    // getParamsFromIFrame(): IFrameParams {
+    //     if (!window.frameElement) {
+    //         // return null
+    //         throw new Error('Not in an iframe');
+    //     }
+    //     if (!window.frameElement.hasAttribute('data-params')) {
+    //         // throw new Error('No params found in window!!');
+    //         // return null
+    //         throw new Error('No data-params on iframe');
+    //     }
+    //     const params = window.frameElement.getAttribute('data-params');
+    //     if (params === null) {
+    //         // throw new Error('No params found in window!')
+    //         // return null
+    //         throw new Error('data-params is null');
+    //     }
+    //     const iframeParams = JSON.parse(decodeURIComponent(params)) as IFrameParams;
+    //     return iframeParams;
+    // }
 
     // setupChannel() {
     //     if (this.props.channelId) {
