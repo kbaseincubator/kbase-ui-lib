@@ -20,7 +20,7 @@ export interface ServiceStatus {
 }
 
 function isString(x: any, p: string): boolean {
-    if (typeof x === 'object' && x.hasOwnProperty(p)) {
+    if (typeof x === 'object' && Reflect.has(x, p)) {
         if (typeof ((Reflect.get(x, p) as unknown) as any) === 'string') {
             return true;
         }
@@ -29,7 +29,7 @@ function isString(x: any, p: string): boolean {
 }
 
 function isNumber(x: any, p: string): boolean {
-    if (typeof x === 'object' && x.hasOwnProperty(p)) {
+    if (typeof x === 'object' && Reflect.has(x, p)) {
         if (typeof ((Reflect.get(x, p) as unknown) as any) === 'number') {
             return true;
         }
@@ -38,7 +38,7 @@ function isNumber(x: any, p: string): boolean {
 }
 
 function isArray(x: any, p: string, subType: string): boolean {
-    if (typeof x === 'object' && x.hasOwnProperty(p)) {
+    if (typeof x === 'object' && Reflect.has(x, p)) {
         const value = Reflect.get(x, p) as unknown;
         if (typeof value === 'object' && value instanceof Array) {
             if (value.length === 0) {
