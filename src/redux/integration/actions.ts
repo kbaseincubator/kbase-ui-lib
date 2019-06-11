@@ -59,6 +59,7 @@ export function appStart() {
         // check and see if we are in an iframe
         let integration = new IFrameIntegration();
         let iframeParams = integration.getParamsFromIFrame();
+        console.log('got params?', iframeParams);
 
         if (iframeParams) {
             // set up the message bus.
