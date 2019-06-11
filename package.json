@@ -4,9 +4,6 @@
     "description": "A typescript library to support kbase-ui and plugins",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
-    "files": [
-        "/lib/**/*"
-    ],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "copy-assets": "copyfiles -u 1  \"./src/**/*.css\" \"./lib/\"",
