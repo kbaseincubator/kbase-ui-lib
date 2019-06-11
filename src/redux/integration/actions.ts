@@ -57,8 +57,10 @@ let channel: Channel;
 export function appStart() {
     return (dispatch: ThunkDispatch<AppStoreState, void, Action>, getState: () => AppStoreState) => {
         // check and see if we are in an iframe
-        let integration = new IFrameIntegration();
-        let iframeParams = integration.getParamsFromIFrame();
+        console.log('here...');
+        const integration = new IFrameIntegration();
+        console.log('there...');
+        const iframeParams = integration.getParamsFromIFrame();
         console.log('got params?', iframeParams);
 
         if (iframeParams) {
