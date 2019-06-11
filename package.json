@@ -4,14 +4,17 @@
     "description": "A typescript library to support kbase-ui and plugins",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
+    "files": [
+        "/lib/**/*"
+    ],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "copy-assets": "copyfiles -u 1  \"./src/**/*.css\" \"./lib/\"",
         "clean": "rm -rf ./lib/*",
         "xbuild": "tsc",
-        "build": "tsc",
+        "build": "bash scripts/build.bash",
         "start": "tsc --watch",
-        "postinstall": "bash scripts/postinstall.bash"
+        "xpostinstall": "bash scripts/postinstall.bash"
     },
     "repository": {
         "type": "git",
