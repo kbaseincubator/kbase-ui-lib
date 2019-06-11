@@ -60,7 +60,7 @@ export function appStart() {
         console.log('here...');
         const integration = new IFrameIntegration();
         console.log('there...');
-        const iframeParams = integration.getParamsFromIFrame();
+        let iframeParams = integration.getParamsFromIFrame();
         console.log('got params?', iframeParams);
 
         if (iframeParams) {
