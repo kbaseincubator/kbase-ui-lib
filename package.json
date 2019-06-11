@@ -14,7 +14,7 @@
         "xbuild": "tsc",
         "build": "tsc",
         "start": "tsc --watch",
-        "postinstall": "bash ./scripts/postinstall.bash"
+        "postinstall": "bash scripts/postinstall.bash"
     },
     "repository": {
         "type": "git",
