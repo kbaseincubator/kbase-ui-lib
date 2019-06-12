@@ -67,10 +67,6 @@ export function appStart() {
             // set up the message bus.
             channelId = iframeParams.channelId;
 
-            channel = new Channel({
-                to: channelId
-            });
-
             // channel.on(
             //     'navigate',
             //     ({ to, params }) => {},
@@ -135,6 +131,10 @@ export function appStart() {
             //     )
             // );
         }
+
+        channel = new Channel({
+            to: channelId
+        });
 
         channel.on(
             'start',
