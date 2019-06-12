@@ -26,7 +26,7 @@ const intervals = [
     [Infinity, 60 * 60 * 24 * 1000]
 ];
 
-export default class NiceElapsedTime extends React.Component<NiceElapsedTimeProps, NiceElapsedTimeState> {
+export default class NiceRelativeTime extends React.Component<NiceElapsedTimeProps, NiceElapsedTimeState> {
     nowTimer: number | null;
     interval: number;
     constructor(props: NiceElapsedTimeProps) {
