@@ -89,11 +89,10 @@ export function appStart() {
 
             // suck up all the params into our state.
         } else {
-            const fakeChannelId = uuid.v4();
-            fakeIframe = new IFrameSimulator(fakeChannelId);
+            channelId = uuid.v4();
+            fakeIframe = new IFrameSimulator(channelId);
             iframeParams = fakeIframe.getParamsFromIFrame();
-            channelId = iframeParams.channelId;
-            console.log('going to create channel for fake iframe...', iframeParams);
+            console.log('going to create channel for fake iframe...', channelId, iframeParams);
             // dispatch(
             //     appLoadSuccess(
             //         {
