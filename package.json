@@ -8,13 +8,14 @@
         "/lib/**/*"
     ],
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jest",
         "copy-assets": "copyfiles -u 1  \"./src/**/*.css\" \"./lib/\"",
         "clean": "rm -rf ./lib/*",
         "xbuild": "tsc",
         "build": "bash scripts/build.bash",
         "start": "tsc --watch",
-        "xpostinstall": "bash scripts/postinstall.bash"
+        "xpostinstall": "bash scripts/postinstall.bash",
+        "generate-api-docs": "typedoc --out api-docs src"
     },
     "repository": {
         "type": "git",
@@ -61,6 +62,7 @@
         "jest": "^24.8.0",
         "typescript": "3.4.5",
         "ts-jest": "^24.0.2",
-        "jest-transform-css": "2.0.0"
+        "jest-transform-css": "2.0.0",
+        "typedoc": "0.14.2"
     }
 }
