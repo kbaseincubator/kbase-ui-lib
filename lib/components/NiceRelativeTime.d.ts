@@ -7,7 +7,7 @@ export interface NiceElapsedTimeProps {
 interface NiceElapsedTimeState {
     now: Date;
 }
-export default class NiceElapsedTime extends React.Component<NiceElapsedTimeProps, NiceElapsedTimeState> {
+export default class NiceRelativeTime extends React.Component<NiceElapsedTimeProps, NiceElapsedTimeState> {
     nowTimer: number | null;
     interval: number;
     constructor(props: NiceElapsedTimeProps);
