@@ -1,16 +1,16 @@
 import * as React from 'react';
-export interface NiceElapsedTimeProps {
+export interface NiceRelativeTimeProps {
     time: Date;
     showTooltip?: boolean;
     tooltipPrefix?: string;
 }
-interface NiceElapsedTimeState {
+interface NiceRelativeTimeState {
     now: Date;
 }
-export default class NiceRelativeTime extends React.Component<NiceElapsedTimeProps, NiceElapsedTimeState> {
+export default class NiceRelativeTime extends React.Component<NiceRelativeTimeProps, NiceRelativeTimeState> {
     nowTimer: number | null;
     interval: number;
-    constructor(props: NiceElapsedTimeProps);
+    constructor(props: NiceRelativeTimeProps);
     calcInterval(): number;
     handleInterval(): void;
     startIntervalTimer(): void;

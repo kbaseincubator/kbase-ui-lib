@@ -2,13 +2,13 @@ import * as React from 'react';
 import { niceRelativeTime } from '../lib/time';
 import { Tooltip } from 'antd';
 
-export interface NiceElapsedTimeProps {
+export interface NiceRelativeTimeProps {
     time: Date;
     showTooltip?: boolean;
     tooltipPrefix?: string;
 }
 
-interface NiceElapsedTimeState {
+interface NiceRelativeTimeState {
     now: Date;
 }
 
@@ -26,10 +26,10 @@ const intervals = [
     [Infinity, 60 * 60 * 24 * 1000]
 ];
 
-export default class NiceRelativeTime extends React.Component<NiceElapsedTimeProps, NiceElapsedTimeState> {
+export default class NiceRelativeTime extends React.Component<NiceRelativeTimeProps, NiceRelativeTimeState> {
     nowTimer: number | null;
     interval: number;
-    constructor(props: NiceElapsedTimeProps) {
+    constructor(props: NiceRelativeTimeProps) {
         super(props);
 
         this.nowTimer = null;
