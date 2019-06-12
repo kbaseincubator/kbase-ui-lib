@@ -48,7 +48,8 @@ class IFrameSimulator {
 
         console.log('created channel for fake iframe', toChannelId);
 
-        this.channel.on('ready', () => {
+        this.channel.on('ready', (msg) => {
+            console.log('got ready!', msg);
             this.channel.send('start', {
                 token: 'abc', // where to get token from
                 username: 'eapearson', // where to get username from
