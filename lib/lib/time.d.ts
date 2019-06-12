@@ -1,12 +1,14 @@
-export interface niceElapsedOptions {
+export interface NiceRelativeTimeOptions {
     absoluteAfter?: number;
-    compactDate?: boolean;
+    compact?: boolean;
     now?: Date;
     precision?: number;
 }
-export declare function niceElapsed(someDate: Date, options?: niceElapsedOptions): string;
+export declare function niceRelativeTime(someDate: Date, options?: NiceRelativeTimeOptions): string;
+declare type Format = 'full' | 'short' | 'compact';
 interface NiceDurationOptions {
     precision?: number;
+    format?: Format;
 }
-export declare function niceDuration(value: number, options: NiceDurationOptions): string;
+export declare function niceDuration(value: number, options?: NiceDurationOptions): string;
 export {};

@@ -59,6 +59,8 @@
         "eslint": "^5.16.0",
         "eslint-plugin-react": "^7.13.0",
         "jest": "^24.8.0",
-        "typescript": "3.4.5"
+        "typescript": "3.4.5",
+        "ts-jest": "^24.0.2",
+        "jest-transform-css": "2.0.0"
     }
 }

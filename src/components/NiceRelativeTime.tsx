@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { niceElapsed } from '../lib/time';
+import { niceRelativeTime } from '../lib/time';
 import { Tooltip } from 'antd';
 
 export interface NiceElapsedTimeProps {
@@ -82,7 +82,7 @@ export default class NiceElapsedTime extends React.Component<NiceElapsedTimeProp
 
     render() {
         if (this.props.showTooltip === false) {
-            return <span>{niceElapsed(this.props.time, { absoluteAfter: 30, now: this.state.now })}</span>;
+            return <span>{niceRelativeTime(this.props.time, { absoluteAfter: 30, now: this.state.now })}</span>;
         }
 
         const fullDate = (
@@ -110,7 +110,7 @@ export default class NiceElapsedTime extends React.Component<NiceElapsedTimeProp
         }
         return (
             <Tooltip placement="bottomRight" title={tooltip}>
-                {niceElapsed(this.props.time, { absoluteAfter: 30, now: this.state.now })}
+                {niceRelativeTime(this.props.time, { absoluteAfter: 30, now: this.state.now })}
             </Tooltip>
         );
     }

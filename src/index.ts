@@ -12,4 +12,4 @@ export { BaseStoreState } from './redux/store';
 export { makeAuthStoreInitialState } from './redux/auth/store';
 export { makeIntegrationStoreInitialState } from './redux/integration/store';
 export { default as NiceTimeDuration } from './components/NiceTimeDuration';
-export { default as NiceElapsedTime } from './components/NiceElapsedTime';
+export { default as NiceElapsedTime } from './components/NiceRelativeTime';
