@@ -90,14 +90,14 @@ interface Handler {
 interface ChannelParams {
     window?: Window;
     host?: string;
-    to: string;
+    to?: string;
 }
 
 export class Channel {
     window: Window;
     host: string;
     id: string;
-    partnerId: string;
+    partnerId: string | null;
     awaitingResponse: Map<string, Handler>;
     waitingListeners: Map<string, Array<Listener>>;
     listeners: Map<string, Array<Listener>>;
@@ -126,7 +126,7 @@ export class Channel {
         // The channel id. Used to filter all messages received to
         // this channel.
         this.id = uuid.v4();
-        this.partnerId = params.to;
+        this.partnerId = params.to || null;
 
         this.awaitingResponse = new Map<string, Handler>();
         this.waitingListeners = new Map<string, Array<Listener>>();
@@ -141,6 +141,10 @@ export class Channel {
         this.unwelcomeReceiptWarning = true;
         this.unwelcomeReceiptWarningCount = 0;
         this.currentListener = null;
+    }
+
+    setTo(toChannelId: string) {
+        this.partnerId = toChannelId;
     }
 
     genId() {
@@ -274,6 +278,9 @@ export class Channel {
     }
 
     send(name: string, payload: Payload) {
+        if (this.partnerId === null) {
+            throw new Error('Channel partner id set, cannot send request');
+        }
         const message = new Message({ name, payload, from: this.id, to: this.partnerId });
         this.sendMessage(message);
     }
@@ -288,8 +295,12 @@ export class Channel {
     }
 
     request(name: string, payload: Payload) {
+        this.ensureSetup();
         return new Promise((resolve, reject) => {
             try {
+                if (this.partnerId === null) {
+                    throw new Error('Channel partner id set, cannot issue request');
+                }
                 this.sendRequest(new Message({ name, payload, from: this.id, to: this.partnerId }), (response: any) => {
                     resolve(response);
                 });
@@ -387,7 +398,14 @@ export class Channel {
         this.window = window;
     }
 
+    ensureSetup() {
+        if (!this.partnerId) {
+            throw new Error('No partner channel id set. Cannot send or receive messages.');
+        }
+    }
+
     start() {
+        this.ensureSetup();
         this.currentListener = (message: MessageEvent) => {
             this.receiveMessage(message);
         };

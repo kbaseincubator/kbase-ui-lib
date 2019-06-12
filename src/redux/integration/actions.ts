@@ -61,11 +61,14 @@ export function appStart() {
         // check and see if we are in an iframe
         const integration = new IFrameIntegration();
         let iframeParams = integration.getParamsFromIFrame();
-        let channelId: string;
+        let hostChannelId: string;
 
         if (iframeParams) {
             // set up the message bus.
-            channelId = iframeParams.channelId;
+            hostChannelId = iframeParams.channelId;
+            channel = new Channel({
+                to: hostChannelId
+            });
 
             // channel.on(
             //     'navigate',
@@ -89,10 +92,12 @@ export function appStart() {
 
             // suck up all the params into our state.
         } else {
-            channelId = uuid.v4();
-            fakeIframe = new IFrameSimulator(channelId);
+            channel = new Channel({});
+            fakeIframe = new IFrameSimulator(channel.id);
+            hostChannelId = fakeIframe.channel.id;
+            channel.setPartner(hostChannelId);
             iframeParams = fakeIframe.getParamsFromIFrame();
-            console.log('going to create channel for fake iframe...', channelId, iframeParams);
+            // console.log('going to create channel for fake iframe...', channelId, iframeParams);
             // dispatch(
             //     appLoadSuccess(
             //         {
@@ -132,10 +137,6 @@ export function appStart() {
             // );
         }
 
-        channel = new Channel({
-            to: channelId
-        });
-
         channel.on(
             'start',
             (params: any) => {
@@ -173,7 +174,7 @@ export function appStart() {
                             defaultPath: '/'
                         },
                         {
-                            channelId
+                            channelId: channel.id
                         }
                     )
                 );

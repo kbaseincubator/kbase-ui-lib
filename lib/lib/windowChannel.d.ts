@@ -64,13 +64,13 @@ interface Handler {
 interface ChannelParams {
     window?: Window;
     host?: string;
-    to: string;
+    to?: string;
 }
 export declare class Channel {
     window: Window;
     host: string;
     id: string;
-    partnerId: string;
+    partnerId: string | null;
     awaitingResponse: Map<string, Handler>;
     waitingListeners: Map<string, Array<Listener>>;
     listeners: Map<string, Array<Listener>>;
@@ -83,6 +83,7 @@ export declare class Channel {
     unwelcomeReceiptWarningCount: number;
     currentListener: ((message: MessageEvent) => void) | null;
     constructor(params: ChannelParams);
+    setTo(toChannelId: string): void;
     genId(): string;
     receiveMessage(messageEvent: MessageEvent): void;
     listen(listener: Listener): void;
@@ -101,6 +102,7 @@ export declare class Channel {
     };
     setPartner(id: string): void;
     attach(window: Window): void;
+    ensureSetup(): void;
     start(): void;
     stop(): void;
 }
