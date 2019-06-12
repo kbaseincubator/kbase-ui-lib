@@ -93,6 +93,7 @@ export function appStart() {
             fakeIframe = new IFrameSimulator(fakeChannelId);
             iframeParams = fakeIframe.getParamsFromIFrame();
             channelId = iframeParams.channelId;
+            console.log('going to create channel for fake iframe...', iframeParams);
             // dispatch(
             //     appLoadSuccess(
             //         {
