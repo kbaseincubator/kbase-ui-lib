@@ -1,11 +1,11 @@
+declare type Format = 'full' | 'short' | 'compact';
 export interface NiceRelativeTimeOptions {
     absoluteAfter?: number;
-    compact?: boolean;
+    format?: Format;
     now?: Date;
     precision?: number;
 }
 export declare function niceRelativeTime(someDate: Date, options?: NiceRelativeTimeOptions): string;
-declare type Format = 'full' | 'short' | 'compact';
 interface NiceDurationOptions {
     precision?: number;
     format?: Format;
