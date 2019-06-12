@@ -85,6 +85,8 @@ class IFrameSimulator {
                 }
             });
         });
+
+        this.channel.start();
     }
 
     getParamsFromIFrame(): IFrameParams {
