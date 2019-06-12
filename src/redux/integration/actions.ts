@@ -97,50 +97,13 @@ export function appStart() {
             hostChannelId = fakeIframe.channel.id;
             channel.setPartner(hostChannelId);
             iframeParams = fakeIframe.getParamsFromIFrame();
-            // console.log('going to create channel for fake iframe...', channelId, iframeParams);
-            // dispatch(
-            //     appLoadSuccess(
-            //         {
-            //             baseUrl: '',
-            //             services: {
-            //                 Groups: {
-            //                     url: iframeParams.params.groupsServiceURL
-            //                 },
-            //                 UserProfile: {
-            //                     url: iframeParams.params.userProfileServiceURL
-            //                 },
-            //                 Workspace: {
-            //                     url: iframeParams.params.workspaceServiceURL
-            //                 },
-            //                 ServiceWizard: {
-            //                     url: iframeParams.params.serviceWizardURL
-            //                 },
-            //                 Auth: {
-            //                     url: iframeParams.params.authServiceURL
-            //                 },
-            //                 NarrativeMethodStore: {
-            //                     url: iframeParams.params.narrativeMethodStoreURL
-            //                 },
-            //                 Catalog: {
-            //                     url: iframeParams.params.catalogServiceURL
-            //                 },
-            //                 NarrativeJobService: {
-            //                     url: iframeParams.params.narrativeJobServiceURL
-            //                 }
-            //             },
-            //             defaultPath: '/'
-            //         },
-            //         {
-            //             channelId: null
-            //         }
-            //     )
-            // );
         }
 
         channel.on(
             'start',
             (params: any) => {
                 const services = params.config.services;
+                console.log('starting!', services);
                 dispatch(
                     appLoadSuccess(
                         {
