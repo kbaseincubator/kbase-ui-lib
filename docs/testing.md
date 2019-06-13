@@ -1,6 +1,6 @@
 # Testing
 
-Testing with jest and enzyme.
+Testing with Jest and Enzyme.
 
 ## Dependencies
 
