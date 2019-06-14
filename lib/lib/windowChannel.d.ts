@@ -91,11 +91,11 @@ export declare class Channel {
     sendMessage(message: Message): void;
     send(name: string, payload: Payload): void;
     sendRequest(message: Message, handler: (response: any) => any): void;
-    request(name: string, payload: Payload): Promise<{}>;
+    request(name: string, payload: Payload): Promise<unknown>;
     startMonitor(): void;
     listenOnce(listener: WaitingListener): void;
     once(name: string, success: (payload: Payload) => void, error: (error: Error) => void): void;
-    when(name: string, timeout: number): Promise<{}>;
+    when(name: string, timeout: number): Promise<unknown>;
     stats(): {
         sent: number;
         received: number;
