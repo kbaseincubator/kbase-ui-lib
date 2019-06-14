@@ -1,6 +1,6 @@
 {
     "name": "kbase-ui-lib",
-    "version": "0.1.0",
+    "version": "0.1.0-alpha.1",
     "description": "A typescript library to support kbase-ui and plugins",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -19,7 +19,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/kbase/kbase-ui-lib.git"
+        "url": "git+https://github.com/kbaseIncubator/kbase-ui-lib.git"
     },
     "keywords": [
         "kbase",
@@ -31,9 +31,9 @@
     "author": "KBase Developers",
     "license": "SEE LICENSE IN LICENSE",
     "bugs": {
-        "url": "https://github.com/kbase/kbase-ui-lib/issues"
+        "url": "https://github.com/kbaseIncubator/kbase-ui-lib/issues"
     },
-    "homepage": "https://github.com/kbase/kbase-ui-lib#readme",
+    "homepage": "https://github.com/kbaseIncubator/kbase-ui-lib#readme",
     "dependencies": {
         "@types/bluebird": "^3.5.27",
         "@types/react": "^16.8.19",
