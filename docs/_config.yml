@@ -1,0 +1,12 @@
+title: KBase UI Lib
+remote_theme: kbaseIncubator/kbase-github-pages-theme
+search_enabled: false
+aux_links: 
+    "KBase UI Lib on Github":
+        - "//github.com/kbaseIncubator/kbase-github-pages-theme"
+    "About KBase":
+        - "//kbase.us/about"
+navigation:
+    menu:
+        - label: Testing
+        - label: Updating npm package
