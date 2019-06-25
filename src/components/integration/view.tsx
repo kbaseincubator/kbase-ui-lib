@@ -107,6 +107,7 @@ export default class KBaseIntegration extends React.Component<KBaseIntegrationPr
 
     componentDidMount() {
         // this.setupChannel();
+        console.log('integration did mount');
         this.setState({
             ready: true
         });
