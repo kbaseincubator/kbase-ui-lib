@@ -5,7 +5,7 @@ export interface DevWrapperProps {}
 
 interface DevWrapperState {}
 
-export class DevWrapper extends React.Component<DevWrapperProps, DevWrapperState> {
+export default class DevWrapper extends React.Component<DevWrapperProps, DevWrapperState> {
     renderNonDev() {
         return <React.Fragment>{this.props.children}</React.Fragment>;
     }
