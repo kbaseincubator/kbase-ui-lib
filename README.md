@@ -6,17 +6,17 @@ This library is a collection of classes, functions, types, and react components 
 
 Includes:
 
--   communication libraries for kbase services and dynamic services
--   types for common kbase data objects and apis
--   components and other support files required for plugin integration
+- communication libraries for kbase services and dynamic services
+- types for common kbase data objects and apis
+- components and other support files required for plugin integration
 
 ## Usage
 
 There are many usage scenarios ...
 
--   comm libraries
--   types
--   plugin integration
+- comm libraries
+- types
+- plugin integration
 
 ## Install
 
