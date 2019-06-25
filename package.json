@@ -1,6 +1,6 @@
 {
     "name": "@kbase/ui-lib",
-    "version": "0.1.0-alpha.6",
+    "version": "0.1.0-alpha.7",
     "description": "A typescript library to support kbase-ui and plugins",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -46,7 +46,8 @@
         "react-redux": "^7.0.3",
         "redux": "^4.0.1",
         "redux-thunk": "^2.3.0",
-        "uuid": "^3.3.2"
+        "uuid": "^3.3.2",
+        "typeface-oxygen": "^0.0.72"
     },
     "devDependencies": {
         "@types/enzyme": "3.9.3",
