@@ -16,7 +16,13 @@
 
 1. increment the version in package.json
 
-2. publish the package:
+2. Make sure it is built
+
+    ```bash
+    npm build
+    ```
+
+3. publish the package:
 
     ```bash
     npm publish
