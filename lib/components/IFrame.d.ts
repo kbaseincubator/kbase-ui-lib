@@ -1,5 +1,5 @@
 import React from 'react';
-import { Channel } from '../../lib/windowChannel';
+import { Channel } from '../lib/windowChannel';
 declare class Runtime {
     token: string | null;
     username: string | null;

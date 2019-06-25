@@ -1,10 +1,10 @@
 import React from 'react';
-import './style.css';
+import './DevWrapper.css';
 export interface DevWrapperProps {
 }
 interface DevWrapperState {
 }
-export declare class DevWrapper extends React.Component<DevWrapperProps, DevWrapperState> {
+export default class DevWrapper extends React.Component<DevWrapperProps, DevWrapperState> {
     renderNonDev(): JSX.Element;
     renderDev(): JSX.Element;
     render(): JSX.Element;
