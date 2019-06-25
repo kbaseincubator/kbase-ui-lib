@@ -1,5 +1,5 @@
 import React from 'react';
-import { Channel } from '../../lib/windowChannel';
+import { Channel } from '../lib/windowChannel';
 import uuid from 'uuid';
 
 class Runtime {

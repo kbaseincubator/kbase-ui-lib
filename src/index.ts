@@ -12,3 +12,4 @@ export { BaseStoreState, makeBaseStoreState } from './redux/store';
 export { default as NiceTimeDuration } from './components/NiceTimeDuration';
 export { default as NiceRelativeTime } from './components/NiceRelativeTime';
 export { default as DevWrapper } from './components/DevWrapper';
+export { default as IFrame } from './components/IFrame';

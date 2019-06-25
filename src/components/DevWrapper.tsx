@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.css';
+import './DevWrapper.css';
 
 export interface DevWrapperProps {}
 
