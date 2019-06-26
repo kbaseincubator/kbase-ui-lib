@@ -127,7 +127,7 @@ export default class KBaseIntegration extends React.Component<KBaseIntegrationPr
 
     render() {
         return (
-            <div data-k-b-testhook-component="KBaseIntegration scrollable-flex-column">
+            <div data-k-b-testhook-component="KBaseIntegration" className="scrollable-flex-column">
                 {this.state.ready ? this.renderReady() : this.renderNotReady()}
             </div>
         );
