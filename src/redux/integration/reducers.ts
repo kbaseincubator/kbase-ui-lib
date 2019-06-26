@@ -4,6 +4,7 @@ import { AppLoadSuccess, ActionType, sendMessage, SendMessage } from './actions'
 import { BaseStoreState } from '../store';
 
 function appLoadSuccess(state: BaseStoreState, action: AppLoadSuccess): BaseStoreState {
+    console.log('app load success reducer...', action);
     return {
         ...state,
         app: {

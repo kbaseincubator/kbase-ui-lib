@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './AppBase.css';
 import '../style/fonts.css';
-import 'antd/dist/antd.css';
+import './style/common.css';
 export interface AppProps {
 }
 interface AppState {

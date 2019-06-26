@@ -4,9 +4,10 @@
 import * as React from 'react';
 import './AppBase.css';
 import '../style/fonts.css';
+import '../style/common.css';
 import KBaseIntegrationLoader from './integration/loader';
 import KBaseAuthLoader from './auth/loader';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
 // import "typeface-oxygen";
 
 export interface AppProps {}
