@@ -140,7 +140,7 @@ export default class KBaseIntegration extends React.Component<KBaseIntegrationPr
     renderReady() {
         return (
             <React.Fragment>
-                {this.hosted ? this.renderHosted() : ''}
+                {this.hosted ? '' : this.renderHosted()}
                 {this.props.children}
             </React.Fragment>
         );
