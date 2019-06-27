@@ -17,11 +17,11 @@ configure({ adapter: new Adapter() });
 
 it('renders without crashing', () => {
     const channelId = null;
-    shallow(<KBaseIntegration channelId={channelId} />);
+    shallow(<KBaseIntegration channelId={channelId} title="" />);
 });
 
 it('renders and unmounts correctly', () => {
     const channelId = null;
-    const rendered = mount(<KBaseIntegration channelId={channelId} />);
+    const rendered = mount(<KBaseIntegration channelId={channelId} title="" />);
     rendered.unmount();
 });

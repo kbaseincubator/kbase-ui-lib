@@ -198,6 +198,10 @@ export default class IFrame extends React.Component<IFrameProps, IFrameState> {
             window.document.body.click();
         });
 
+        channel.on('click', () => {
+            window.document.body.click();
+        });
+
         channel.on('set-title', (config) => {
             console.warn('set-title not yet supported');
             // this.runtime.send('ui', 'setTitle', config.title);

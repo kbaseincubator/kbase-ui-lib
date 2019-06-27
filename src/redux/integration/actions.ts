@@ -55,6 +55,7 @@ export function appLoadError(error: AppError): AppLoadError {
 
 let channel: Channel;
 let fakeIframe: IFrameSimulator;
+let windowListener: any;
 
 export function appStart() {
     return (dispatch: ThunkDispatch<AppStoreState, void, Action>, getState: () => AppStoreState) => {
@@ -103,7 +104,7 @@ export function appStart() {
             'start',
             (params: any) => {
                 const services = params.config.services;
-                console.log('starting!', services);
+                console.log('starting (action)!', services);
                 dispatch(
                     appLoadSuccess(
                         {
@@ -137,7 +138,8 @@ export function appStart() {
                             defaultPath: '/'
                         },
                         {
-                            channelId: channel.id
+                            channelId: channel.id,
+                            title: ''
                         }
                     )
                 );
@@ -152,6 +154,17 @@ export function appStart() {
         channel.send('ready', {
             channelId: channel.id,
             greeting: 'heloooo'
+        });
+
+        windowListener = () => {
+            console.log('inside iframe: clicked window in iframe');
+            channel.send('clicked', {});
+        };
+
+        window.document.body.addEventListener('click', windowListener);
+
+        channel.on('set-title', ({ title }) => {
+            console.log('setting title?', title);
         });
     };
 }

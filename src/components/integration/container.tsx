@@ -18,6 +18,7 @@ export interface OwnProps {}
 interface StateProps {
     defaultPath: string;
     channelId: string | null;
+    title: string;
 }
 
 interface DispatchProps {
@@ -29,12 +30,13 @@ export function mapStateToProps(state: AppStoreState, props: OwnProps): StatePro
         app: {
             status,
             config: { defaultPath },
-            runtime: { channelId }
+            runtime: { channelId, title }
         }
     } = state;
     return {
         defaultPath,
-        channelId
+        channelId,
+        title
     };
 }
 

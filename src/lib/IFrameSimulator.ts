@@ -84,6 +84,16 @@ class IFrameSimulator {
             });
         });
 
+        this.channel.on(
+            'click',
+            () => {
+                console.log('received click from iframe...');
+            },
+            (err) => {
+                console.error('Error receiving click from iframe...');
+            }
+        );
+
         this.channel.start();
     }
 

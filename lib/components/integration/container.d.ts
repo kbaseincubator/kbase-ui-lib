@@ -6,6 +6,7 @@ export interface OwnProps {
 interface StateProps {
     defaultPath: string;
     channelId: string | null;
+    title: string;
 }
 interface DispatchProps {
     onAppStart: () => void;
