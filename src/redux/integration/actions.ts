@@ -15,7 +15,8 @@ export enum ActionType {
     APP_LOAD_START = 'app load start',
     APP_LOAD_SUCCESS = 'app load success',
     APP_LOAD_ERROR = 'app load error',
-    APP_SEND_MESSAGE = 'app/sendMessage'
+    APP_SEND_MESSAGE = 'app/sendMessage',
+    APP_SET_TITLE = "app/set/title"
 }
 
 // Action Definitions
@@ -36,6 +37,11 @@ export interface AppLoadError extends Action {
     error: AppError;
 }
 
+export interface AppSetTitle extends Action<ActionType.APP_SET_TITLE> {
+    type: ActionType.APP_SET_TITLE;
+    title: string;
+  }
+
 // Action Creators
 
 export function appLoadSuccess(config: AppConfig, runtime: AppRuntime): AppLoadSuccess {
@@ -52,6 +58,26 @@ export function appLoadError(error: AppError): AppLoadError {
         error
     };
 }
+
+export function appSetTitle(title: string) {
+    return async (dispatch: ThunkDispatch<AppStoreState, void, Action>, getState: () => AppStoreState) => {
+      const {
+        app: {
+          runtime: { channelId }
+        }
+      } = getState();
+  
+      if (!channelId) {
+        console.warn("Trying to set title without a channel!");
+        return;
+      }
+  
+      const channel = new Channel({ to: channelId });
+      channel.send("set-title", {
+        title
+      });
+    };
+  }
 
 let channel: Channel;
 let fakeIframe: IFrameSimulator;
