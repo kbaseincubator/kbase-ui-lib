@@ -6,7 +6,6 @@ import { IFrameIntegration } from '../../lib/IFrameIntegration';
 import { AppConfig, AppStoreState, AppRuntime } from './store';
 import { AppError } from '../store';
 import { Channel } from '../../lib/windowChannel';
-import uuid = require('uuid');
 
 // Action types
 
@@ -15,7 +14,8 @@ export enum ActionType {
     APP_LOAD_START = 'app load start',
     APP_LOAD_SUCCESS = 'app load success',
     APP_LOAD_ERROR = 'app load error',
-    APP_SEND_MESSAGE = 'app/sendMessage'
+    APP_SEND_MESSAGE = 'app/send/message',
+    APP_SET_TITLE = 'app/set/title'
 }
 
 // Action Definitions
@@ -36,6 +36,10 @@ export interface AppLoadError extends Action {
     error: AppError;
 }
 
+export interface AppSetTitle extends Action {
+    type: ActionType.APP_SET_TITLE;
+    title: string;
+}
 // Action Creators
 
 export function appLoadSuccess(config: AppConfig, runtime: AppRuntime): AppLoadSuccess {
@@ -50,6 +54,13 @@ export function appLoadError(error: AppError): AppLoadError {
     return {
         type: ActionType.APP_LOAD_ERROR,
         error
+    };
+}
+
+export function appSetTitle(title: string): AppSetTitle {
+    return {
+        type: ActionType.APP_SET_TITLE,
+        title
     };
 }
 
@@ -165,6 +176,7 @@ export function appStart() {
 
         channel.on('set-title', ({ title }) => {
             console.log('setting title?', title);
+            dispatch(appSetTitle(title));
         });
     };
 }
