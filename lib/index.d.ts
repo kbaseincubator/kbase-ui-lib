@@ -8,8 +8,8 @@ export { default as NarrativeJobServiceClient } from './lib/coreServices/Narrati
 export { default as CatalogClient } from './lib/coreServices/Catalog';
 export { AppError } from './redux/store';
 export { default as baseReducer } from './redux/reducers';
-export { BaseStoreState } from './redux/store';
-export { makeAuthStoreInitialState } from './redux/auth/store';
-export { makeIntegrationStoreInitialState } from './redux/integration/store';
+export { BaseStoreState, makeBaseStoreState } from './redux/store';
 export { default as NiceTimeDuration } from './components/NiceTimeDuration';
 export { default as NiceRelativeTime } from './components/NiceRelativeTime';
+export { default as DevWrapper } from './components/DevWrapper';
+export { default as IFrame } from './components/IFrame';

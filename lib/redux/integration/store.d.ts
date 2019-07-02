@@ -37,6 +37,7 @@ export interface AppConfig {
 }
 export interface AppRuntime {
     channelId: string | null;
+    title: string;
 }
 export interface AppStoreState {
     app: {

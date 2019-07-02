@@ -42,6 +42,7 @@ export interface AppConfig {
 
 export interface AppRuntime {
     channelId: string | null;
+    title: string;
 }
 
 export interface AppStoreState {
@@ -88,7 +89,8 @@ export function makeIntegrationStoreInitialState(): AppStoreState {
                 defaultPath: ''
             },
             runtime: {
-                channelId: null
+                channelId: null,
+                title: ''
             }
         }
     };

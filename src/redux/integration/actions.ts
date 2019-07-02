@@ -6,7 +6,6 @@ import { IFrameIntegration } from '../../lib/IFrameIntegration';
 import { AppConfig, AppStoreState, AppRuntime } from './store';
 import { AppError } from '../store';
 import { Channel } from '../../lib/windowChannel';
-import uuid = require('uuid');
 
 // Action types
 
@@ -15,7 +14,8 @@ export enum ActionType {
     APP_LOAD_START = 'app load start',
     APP_LOAD_SUCCESS = 'app load success',
     APP_LOAD_ERROR = 'app load error',
-    APP_SEND_MESSAGE = 'app/sendMessage'
+    APP_SEND_MESSAGE = 'app/send/message',
+    APP_SET_TITLE = 'app/set/title'
 }
 
 // Action Definitions
@@ -36,6 +36,10 @@ export interface AppLoadError extends Action {
     error: AppError;
 }
 
+export interface AppSetTitle extends Action {
+    type: ActionType.APP_SET_TITLE;
+    title: string;
+}
 // Action Creators
 
 export function appLoadSuccess(config: AppConfig, runtime: AppRuntime): AppLoadSuccess {
@@ -53,8 +57,16 @@ export function appLoadError(error: AppError): AppLoadError {
     };
 }
 
+export function appSetTitle(title: string): AppSetTitle {
+    return {
+        type: ActionType.APP_SET_TITLE,
+        title
+    };
+}
+
 let channel: Channel;
 let fakeIframe: IFrameSimulator;
+let windowListener: any;
 
 export function appStart() {
     return (dispatch: ThunkDispatch<AppStoreState, void, Action>, getState: () => AppStoreState) => {
@@ -103,7 +115,7 @@ export function appStart() {
             'start',
             (params: any) => {
                 const services = params.config.services;
-                console.log('starting!', services);
+                console.log('starting (action)!', services);
                 dispatch(
                     appLoadSuccess(
                         {
@@ -137,7 +149,8 @@ export function appStart() {
                             defaultPath: '/'
                         },
                         {
-                            channelId: channel.id
+                            channelId: channel.id,
+                            title: ''
                         }
                     )
                 );
@@ -152,6 +165,18 @@ export function appStart() {
         channel.send('ready', {
             channelId: channel.id,
             greeting: 'heloooo'
+        });
+
+        windowListener = () => {
+            console.log('inside iframe: clicked window in iframe');
+            channel.send('clicked', {});
+        };
+
+        window.document.body.addEventListener('click', windowListener);
+
+        channel.on('set-title', ({ title }) => {
+            console.log('setting title?', title);
+            dispatch(appSetTitle(title));
         });
     };
 }
