@@ -66,6 +66,7 @@ interface ChannelParams {
     host?: string;
     id?: string;
     to?: string;
+    debug?: boolean;
 }
 export declare class Channel {
     window: Window;
@@ -83,6 +84,7 @@ export declare class Channel {
     unwelcomeReceiptWarning: boolean;
     unwelcomeReceiptWarningCount: number;
     currentListener: ((message: MessageEvent) => void) | null;
+    debug: boolean;
     constructor(params: ChannelParams);
     setTo(toChannelId: string): void;
     genId(): string;

@@ -92,6 +92,7 @@ interface ChannelParams {
     host?: string;
     id?: string;
     to?: string;
+    debug?: boolean
 }
 
 export class Channel {
@@ -110,10 +111,12 @@ export class Channel {
     unwelcomeReceiptWarning: boolean;
     unwelcomeReceiptWarningCount: number;
     currentListener: ((message: MessageEvent) => void) | null;
+    debug: boolean;
 
     constructor(params: ChannelParams) {
         // The given window upon which we will listen for messages.
         this.window = params.window || window;
+        this.debug = params.debug || false;
 
         // The host for the window; required for postmessage
         if (this.window.document === null) {
@@ -171,6 +174,7 @@ export class Channel {
             }
             return;
         }
+       
         if (!message.envelope) {
             this.unwelcomeReceivedCount++;
             if (this.unwelcomeReceiptWarning) {
@@ -178,10 +182,16 @@ export class Channel {
             }
             return;
         }
-        if (message.envelope.from === this.id) {
-            console.warn('received own message, ignoring', message.name);
-            return;
+
+        if (this.debug) {
+            console.debug('[windowChannel][debug]', this.id, message.envelope.to, this.partnerId, message.envelope.from, message);
         }
+
+        // Here we ignore messages intended for another windowChannel object.
+        // if (message.envelope.from === this.id) {
+        //     // console.warn('received own message, ignoring', message.name);
+        //     return;
+        // }
         if (message.envelope.to !== this.id) {
             this.unwelcomeReceivedCount++;
             if (this.unwelcomeReceiptWarning) {

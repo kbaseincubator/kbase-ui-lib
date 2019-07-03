@@ -69,17 +69,23 @@ export function appSetTitle(title: string) {
         }
       } = getState();
   
-      if (!channelId) {
+    //   if (!channelId) {
+    //     console.warn("Trying to set title without a channel!");
+    //     return;
+    //   }
+
+    //   if (!hostChannelId) {
+    //     console.warn("Trying to set title without a host channel!");
+    //     return;
+    //   }
+
+      if (!channel) {
         console.warn("Trying to set title without a channel!");
         return;
       }
 
-      if (!hostChannelId) {
-        console.warn("Trying to set title without a host channel!");
-        return;
-      }
       console.log('setting app title by sending message to channel with id ', channelId);
-      const channel = new Channel({ id: channelId, to: hostChannelId });
+    //   const channel = new Channel({ id: channelId, to: hostChannelId });
       channel.send("set-title", {
         title
       });
@@ -87,7 +93,6 @@ export function appSetTitle(title: string) {
   }
 
 let channel: Channel;
-let fakeIframe: IFrameSimulator;
 let windowListener: any;
 
 export function appStart() {
@@ -97,42 +102,33 @@ export function appStart() {
         let iframeParams = integration.getParamsFromIFrame();
         let hostChannelId: string;
 
+        // Here we establish our comm channel, based on postMessage.
+        // If iframe params are detected, we are operating in an iframe which
+        // also means inside kbase-ui. The iframe will have a data- attribute 
+        // containing the id of the channel already set up by the ui. We call 
+        // this the host channel.
+        // Without the ui, most commonly in develop mode but also testing, 
+        // the host channel is set up by a "fake iframe" object, which simulates
+        // the host environment.
         if (iframeParams) {
-            // set up the message bus.
+            // set up the plugin message bus.
             hostChannelId = iframeParams.channelId;
             channel = new Channel({
                 to: hostChannelId
             });
-
-            // channel.on(
-            //     'navigate',
-            //     ({ to, params }) => {},
-            //     (err) => {
-            //         console.error('Error processing "navigate" message');
-            //     }
-            // );
-
-            // route from paths passed in from kbase-ui
-            // switch (iframeParams.params.view) {
-            //     case 'org':
-            //         defaultPath = '/viewOrganization/' + iframeParams.params.viewParams.id;
-            //         window.history.replaceState(null, 'test', defaultPath);
-            //         break;
-            //     default:
-            //         defaultPath = '/organizations';
-            //         window.history.replaceState(null, 'organizations', '/organizations');
-            //         break;
-            // }
-
-            // suck up all the params into our state.
         } else {
+            // Create and configure the plugin message bus.
             channel = new Channel({});
-            fakeIframe = new IFrameSimulator(channel.id);
+            const fakeIframe = new IFrameSimulator(channel.id);
             hostChannelId = fakeIframe.channel.id;
             channel.setPartner(hostChannelId);
             iframeParams = fakeIframe.getParamsFromIFrame();
         }
 
+        // A plugin will wait until receiving a 'start' message. The 
+        // start message contains enough data for most apps to start
+        // going, including core service configuration and communication 
+        // settings.
         channel.on(
             'start',
             (params: any) => {
@@ -183,8 +179,20 @@ export function appStart() {
             }
         );
 
+        // channel.on(
+        //     'navigate',
+        //     ({ to, params }) => {},
+        //     (err) => {
+        //         console.error('Error processing "navigate" message');
+        //     }
+        // );
+
         channel.start();
 
+        // The 'ready' message is sent by the plugin (via the integration component and 
+        // associated actions like this one) to the ui to indicate that the initial code is loaded
+        // and it is ready for further instructions (which in all likelihood is the 'start'
+        // message handled above.)
         channel.send('ready', {
             channelId: channel.id,
             greeting: 'heloooo'
