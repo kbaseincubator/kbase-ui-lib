@@ -65,7 +65,7 @@ export function appSetTitle(title: string) {
     return async (dispatch: ThunkDispatch<AppStoreState, void, Action>, getState: () => AppStoreState) => {
       const {
         app: {
-          runtime: { channelId }
+          runtime: { channelId, hostChannelId }
         }
       } = getState();
   
@@ -73,8 +73,13 @@ export function appSetTitle(title: string) {
         console.warn("Trying to set title without a channel!");
         return;
       }
-  
-      const channel = new Channel({ to: channelId });
+
+      if (!hostChannelId) {
+        console.warn("Trying to set title without a host channel!");
+        return;
+      }
+      console.log('setting app title by sending message to channel with id ', channelId);
+      const channel = new Channel({ id: channelId, to: hostChannelId });
       channel.send("set-title", {
         title
       });
@@ -167,6 +172,7 @@ export function appStart() {
                         },
                         {
                             channelId: channel.id,
+                            hostChannelId,
                             title: ''
                         }
                     )
@@ -191,10 +197,10 @@ export function appStart() {
 
         window.document.body.addEventListener('click', windowListener);
 
-        channel.on('set-title', ({ title }) => {
-            console.log('setting title?', title);
-            dispatch(appSetTitle(title));
-        });
+        // channel.on('set-title', ({ title }) => {
+        //     console.log('setting title?', title);
+        //     dispatch(appSetTitle(title));
+        // });
     };
 }
 

@@ -64,6 +64,7 @@ interface Handler {
 interface ChannelParams {
     window?: Window;
     host?: string;
+    id?: string;
     to?: string;
 }
 export declare class Channel {

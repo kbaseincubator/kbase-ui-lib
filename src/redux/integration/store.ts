@@ -42,6 +42,7 @@ export interface AppConfig {
 
 export interface AppRuntime {
     channelId: string | null;
+    hostChannelId: string | null;
     title: string;
 }
 
@@ -90,6 +91,7 @@ export function makeIntegrationStoreInitialState(): AppStoreState {
             },
             runtime: {
                 channelId: null,
+                hostChannelId: null,
                 title: ''
             }
         }

@@ -90,6 +90,7 @@ interface Handler {
 interface ChannelParams {
     window?: Window;
     host?: string;
+    id?: string;
     to?: string;
 }
 
@@ -125,7 +126,7 @@ export class Channel {
 
         // The channel id. Used to filter all messages received to
         // this channel.
-        this.id = uuid.v4();
+        this.id = params.id || uuid.v4();
         this.partnerId = params.to || null;
 
         this.awaitingResponse = new Map<string, Handler>();
@@ -184,7 +185,7 @@ export class Channel {
         if (message.envelope.to !== this.id) {
             this.unwelcomeReceivedCount++;
             if (this.unwelcomeReceiptWarning) {
-                console.warn("Message envelope does not match this channel's id", message, this.id, this.partnerId);
+                console.warn("Message envelope does not match this channel's id", 'message', message, 'channel id', this.id, 'partner id', this.partnerId);
             }
             return;
         }
