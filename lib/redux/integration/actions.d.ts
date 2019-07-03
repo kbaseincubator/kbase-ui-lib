@@ -19,13 +19,13 @@ export interface AppLoadError extends Action {
     type: ActionType.APP_LOAD_ERROR;
     error: AppError;
 }
-export interface AppSetTitle extends Action {
+export interface AppSetTitle extends Action<ActionType.APP_SET_TITLE> {
     type: ActionType.APP_SET_TITLE;
     title: string;
 }
 export declare function appLoadSuccess(config: AppConfig, runtime: AppRuntime): AppLoadSuccess;
 export declare function appLoadError(error: AppError): AppLoadError;
-export declare function appSetTitle(title: string): AppSetTitle;
+export declare function appSetTitle(title: string): (dispatch: ThunkDispatch<AppStoreState, void, Action<any>>, getState: () => AppStoreState) => Promise<void>;
 export declare function appStart(): (dispatch: ThunkDispatch<AppStoreState, void, Action<any>>, getState: () => AppStoreState) => void;
 export interface SendMessage {
     type: ActionType.APP_SEND_MESSAGE;
