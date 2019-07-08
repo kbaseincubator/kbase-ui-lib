@@ -2,7 +2,7 @@ import React, { Props } from 'react';
 import { getParamsFromIFrame } from '../../lib/IFrameIntegration';
 import { IFrameParams } from '../../lib/IFrameSupport';
 import { RootState } from '../../redux/root/store';
-import Develop from '../develop';
+import Develop from '../Develop';
 
 export interface RootProps {
     rootState: RootState;
