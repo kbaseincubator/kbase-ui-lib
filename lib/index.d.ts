@@ -10,6 +10,4 @@ export { default as baseReducer } from './redux/reducers';
 export { AppError, BaseStoreState, makeBaseStoreState } from './redux/store';
 export { default as NiceTimeDuration } from './components/NiceTimeDuration';
 export { default as NiceRelativeTime } from './components/NiceRelativeTime';
-// export { default as DevWrapper } from './components/develop/';
-export { default as IFrame } from './components/IFrame';
 export { appSetTitle } from './redux/integration/actions';
