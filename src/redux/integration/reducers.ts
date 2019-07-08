@@ -15,7 +15,6 @@ function appLoadSuccess(state: BaseStoreState, action: AppLoadSuccess): BaseStor
 }
 
 function appSetTitle(state: BaseStoreState, action: AppSetTitle): BaseStoreState {
-    console.log('set title reducer', action.title);
     return {
         ...state,
         app: {

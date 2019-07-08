@@ -38,6 +38,7 @@ export interface AppConfig {
 export interface AppRuntime {
     channelId: string | null;
     hostChannelId: string | null;
+    devMode: boolean | null;
     title: string;
 }
 export interface AppStoreState {

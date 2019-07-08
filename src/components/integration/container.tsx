@@ -1,9 +1,10 @@
 import { Dispatch, Action } from 'redux';
 import { connect } from 'react-redux';
-import { AppStoreState } from '../../redux/integration/store';
+// import { AppStoreState } from '../../redux/integration/store';
 
 import { appStart } from '../../redux/integration/actions';
 import IntegrationComponent from './view';
+import { BaseStoreState } from '../../redux/store';
 
 // This is the "loader" component, which really just waits until the app is ready
 // according to the store. onAppStart invokes the startup process for the app, which
@@ -17,7 +18,7 @@ export interface OwnProps {}
 
 interface StateProps {
     defaultPath: string;
-    channelId: string | null;
+    hostChannelId: string | null;
     title: string;
 }
 
@@ -25,17 +26,18 @@ interface DispatchProps {
     onAppStart: () => void;
 }
 
-export function mapStateToProps(state: AppStoreState, props: OwnProps): StateProps {
+export function mapStateToProps(state: BaseStoreState, props: OwnProps): StateProps {
     const {
         app: {
             status,
             config: { defaultPath },
-            runtime: { channelId, title }
-        }
+            runtime: { title }
+        },
+        root: { hostChannelId }
     } = state;
     return {
         defaultPath,
-        channelId,
+        hostChannelId,
         title
     };
 }
@@ -48,7 +50,7 @@ export function mapDispatchToProps(dispatch: Dispatch<Action>): DispatchProps {
     };
 }
 
-export default connect<StateProps, DispatchProps, OwnProps, AppStoreState>(
+export default connect<StateProps, DispatchProps, OwnProps, BaseStoreState>(
     mapStateToProps,
     mapDispatchToProps
 )(IntegrationComponent);

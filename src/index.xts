@@ -6,11 +6,10 @@ export { ServiceClient, AuthorizedServiceClient } from './lib/comm/ServiceClient
 export { DynamicServiceClient, DynamicServiceClientParams } from './lib/comm/DynamicServiceClient';
 export { default as NarrativeJobServiceClient } from './lib/coreServices/NarrativeJobService';
 export { default as CatalogClient } from './lib/coreServices/Catalog';
-export { AppError } from './redux/store';
 export { default as baseReducer } from './redux/reducers';
-export { BaseStoreState, makeBaseStoreState } from './redux/store';
+export { AppError, BaseStoreState, makeBaseStoreState } from './redux/store';
 export { default as NiceTimeDuration } from './components/NiceTimeDuration';
 export { default as NiceRelativeTime } from './components/NiceRelativeTime';
-export { default as DevWrapper } from './components/DevWrapper';
+// export { default as DevWrapper } from './components/develop/';
 export { default as IFrame } from './components/IFrame';
 export { appSetTitle } from './redux/integration/actions';

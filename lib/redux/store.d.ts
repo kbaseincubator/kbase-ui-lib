@@ -1,6 +1,8 @@
 import { AppStoreState } from './integration/store';
 import { AuthStoreState } from './auth/store';
-export interface BaseStoreState extends AppStoreState, AuthStoreState {
+import { DevelopStoreState } from './develop/store';
+import { RootStoreState } from './root/store';
+export interface BaseStoreState extends RootStoreState, AppStoreState, AuthStoreState, DevelopStoreState {
 }
 export declare function makeBaseStoreState(): BaseStoreState;
 export interface AppError {

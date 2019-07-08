@@ -47,6 +47,7 @@ export function mapStateToProps(state: AppStoreState, props: OwnProps): StatePro
 export function mapDispatchToProps(dispatch: Dispatch<Action>): DispatchProps {
     return {
         onLoad: () => {
+            console.log('integration loading...');
             dispatch(appStart() as any);
         }
     };

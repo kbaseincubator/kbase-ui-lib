@@ -1,17 +1,18 @@
 import { Action, Reducer } from 'redux';
 import appReducer from './integration/reducers';
 import authReducer from './auth/reducers';
+import developReducer from './develop/reducers';
+import rootReducer from './root/reducers';
 import { BaseStoreState } from './store';
 
 const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreState | undefined, action: Action) => {
-    const reducers = [appReducer, authReducer];
+    const reducers = [rootReducer, appReducer, authReducer, developReducer];
     for (const reducer of reducers) {
         const newState = reducer(state, action);
         if (newState) {
             return newState;
         }
     }
-    // return null;
 };
 
 export default reducer;

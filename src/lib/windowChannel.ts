@@ -92,7 +92,7 @@ interface ChannelParams {
     host?: string;
     id?: string;
     to?: string;
-    debug?: boolean
+    debug?: boolean;
 }
 
 export class Channel {
@@ -130,6 +130,8 @@ export class Channel {
         // The channel id. Used to filter all messages received to
         // this channel.
         this.id = params.id || uuid.v4();
+
+        this.debugLog('Setting partner id to ' + params.to);
         this.partnerId = params.to || null;
 
         this.awaitingResponse = new Map<string, Handler>();
@@ -145,6 +147,12 @@ export class Channel {
         this.unwelcomeReceiptWarning = true;
         this.unwelcomeReceiptWarningCount = 0;
         this.currentListener = null;
+    }
+
+    debugLog(message: string) {
+        if (this.debug) {
+            console.log('[windowChannel][' + this.id + '] ' + message);
+        }
     }
 
     setTo(toChannelId: string) {
@@ -174,7 +182,7 @@ export class Channel {
             }
             return;
         }
-       
+
         if (!message.envelope) {
             this.unwelcomeReceivedCount++;
             if (this.unwelcomeReceiptWarning) {
@@ -184,7 +192,14 @@ export class Channel {
         }
 
         if (this.debug) {
-            console.debug('[windowChannel][debug]', this.id, message.envelope.to, this.partnerId, message.envelope.from, message);
+            console.debug(
+                '[windowChannel][debug]',
+                this.id,
+                message.envelope.to,
+                this.partnerId,
+                message.envelope.from,
+                message
+            );
         }
 
         // Here we ignore messages intended for another windowChannel object.
@@ -195,7 +210,15 @@ export class Channel {
         if (message.envelope.to !== this.id) {
             this.unwelcomeReceivedCount++;
             if (this.unwelcomeReceiptWarning) {
-                console.warn("Message envelope does not match this channel's id", 'message', message, 'channel id', this.id, 'partner id', this.partnerId);
+                console.warn(
+                    "Message envelope does not match this channel's id",
+                    'message',
+                    message,
+                    'channel id',
+                    this.id,
+                    'partner id',
+                    this.partnerId
+                );
             }
             return;
         }
@@ -289,8 +312,9 @@ export class Channel {
     }
 
     send(name: string, payload: Payload) {
+        this.debugLog(' sending message: ' + name + ', with payload: ' + JSON.stringify(payload));
         if (this.partnerId === null) {
-            throw new Error('Channel partner id set, cannot send request');
+            throw new Error('Channel partner id not set, cannot send message');
         }
         const message = new Message({ name, payload, from: this.id, to: this.partnerId });
         this.sendMessage(message);
@@ -306,11 +330,11 @@ export class Channel {
     }
 
     request(name: string, payload: Payload) {
-        this.ensureSetup();
+        // this.ensureSetup();
         return new Promise((resolve, reject) => {
             try {
                 if (this.partnerId === null) {
-                    throw new Error('Channel partner id set, cannot issue request');
+                    throw new Error('Channel partner id not set, cannot issue request');
                 }
                 this.sendRequest(new Message({ name, payload, from: this.id, to: this.partnerId }), (response: any) => {
                     resolve(response);
@@ -409,14 +433,17 @@ export class Channel {
         this.window = window;
     }
 
-    ensureSetup() {
-        if (!this.partnerId) {
-            throw new Error('No partner channel id set. Cannot send or receive messages.');
-        }
-    }
+    // ensureSetup() {
+    //     if (!this.partnerId) {
+    //         throw new Error('No partner channel id set. Cannot send or receive messages.');
+    //     }
+    // }
 
     start() {
-        this.ensureSetup();
+        // this.ensureSetup();
+        if (this.debug) {
+            console.log('[windowChannel][' + this.id + '] starting');
+        }
         this.currentListener = (message: MessageEvent) => {
             this.receiveMessage(message);
         };

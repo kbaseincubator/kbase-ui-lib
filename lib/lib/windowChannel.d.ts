@@ -86,6 +86,7 @@ export declare class Channel {
     currentListener: ((message: MessageEvent) => void) | null;
     debug: boolean;
     constructor(params: ChannelParams);
+    debugLog(message: string): void;
     setTo(toChannelId: string): void;
     genId(): string;
     receiveMessage(messageEvent: MessageEvent): void;
@@ -105,7 +106,6 @@ export declare class Channel {
     };
     setPartner(id: string): void;
     attach(window: Window): void;
-    ensureSetup(): void;
     start(): void;
     stop(): void;
 }

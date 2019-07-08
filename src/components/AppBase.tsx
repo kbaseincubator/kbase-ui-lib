@@ -7,6 +7,8 @@ import '../style/fonts.css';
 import '../style/common.css';
 import KBaseIntegrationLoader from './integration/loader';
 import KBaseAuthLoader from './auth/loader';
+import Develop from './develop';
+import Root from './root';
 // import 'antd/dist/antd.css';
 // import "typeface-oxygen";
 
@@ -29,16 +31,16 @@ export default class AppBase extends React.Component<AppProps, AppState> {
     clickMe() {
         this.setState({ clicks: this.state.clicks + 1 });
     }
-
+    // <KBaseAuthLoader hosted={this.hosted}>
     render() {
         return (
-            <KBaseIntegrationLoader>
-                <KBaseAuthLoader hosted={this.hosted}>
+            <Root>
+                <KBaseIntegrationLoader>
                     <div className="Row Row-fullheight Row-scrollable" data-k-b-testhook-component="AppBase">
                         {this.props.children}
                     </div>
-                </KBaseAuthLoader>
-            </KBaseIntegrationLoader>
+                </KBaseIntegrationLoader>
+            </Root>
         );
     }
 }

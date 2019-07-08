@@ -125,6 +125,8 @@ export function checkAuth() {
         }
 
         const auth = new AuthClient({ url: url });
+
+        // Oh no, an orphan promise!
         Promise.all([auth.getTokenInfo(token), auth.getMe(token)])
             .then(([tokenInfo, account]) => {
                 const roles = account.roles.map(({ id, desc }) => id);

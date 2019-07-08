@@ -26,7 +26,7 @@ import './style.css';
 // }
 
 export interface KBaseIntegrationProps {
-    channelId: string | null;
+    hostChannelId: string | null;
     title: string;
     // iframeParams: IFrameParams;
 }
@@ -107,14 +107,6 @@ export default class KBaseIntegration extends React.Component<KBaseIntegrationPr
     //     }
     // }
 
-    renderTitleToolbar() {
-        return (
-            <div>
-                Title: <span>{this.props.title}</span>
-            </div>
-        );
-    }
-
     teardownChannel() {}
 
     componentDidMount() {
@@ -133,17 +125,12 @@ export default class KBaseIntegration extends React.Component<KBaseIntegrationPr
     //     return <React.Fragment>{this.props.children}</React.Fragment>;
     // }
 
-    renderHosted() {
-        return <div style={{ border: '1px solid red', padding: '1em' }}>{this.renderTitleToolbar()}</div>;
-    }
+    // renderHosted() {
+    //     return <div style={{ border: '1px solid red', padding: '1em' }}>{this.renderTitleToolbar()}</div>;
+    // }
 
     renderReady() {
-        return (
-            <React.Fragment>
-                {this.hosted ? '' : this.renderHosted()}
-                {this.props.children}
-            </React.Fragment>
-        );
+        return <React.Fragment>{this.props.children}</React.Fragment>;
     }
 
     renderNotReady() {

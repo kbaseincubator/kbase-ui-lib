@@ -1,6 +1,4 @@
 import { IFrameParams } from './IFrameSupport';
-export declare class IFrameIntegration {
-    getParamsFromIFrame(): IFrameParams | null;
-    getChannelID(): string | null;
-    getIframeElement(): Element;
-}
+export declare function getParamsFromIFrame(): IFrameParams | null;
+export declare function getParamsFromDOM(): IFrameParams | null;
+export declare function getChannelID(): string | null;
