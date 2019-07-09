@@ -440,7 +440,6 @@ export class Channel {
     // }
 
     start() {
-        // this.ensureSetup();
         if (this.debug) {
             console.log('[windowChannel][' + this.id + '] starting');
         }

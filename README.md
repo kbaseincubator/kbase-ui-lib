@@ -34,11 +34,11 @@ HOW THIS FITS INTO KBASE
 
 ## Acknowledgments
 
--   NAME - COMMENT
+- NAME - COMMENT
 
 ## See Also
 
--   [TITLE](URL)
+- [TITLE](URL)
 
 ## License
 

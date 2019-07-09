@@ -82,12 +82,7 @@ export function appSetTitle(title: string) {
             return;
         }
 
-        // console.log('setting app title by sending message to channel with id ', hostChannelId);
-        //   const channel = new Channel({ id: channelId, to: hostChannelId });
         dispatch(sendMessage('set-title', { title }));
-        //   channel.send("set-title", {
-        //     title
-        //   });
     };
 }
 
@@ -96,10 +91,8 @@ let windowListener: any;
 
 export function appStart() {
     return (dispatch: ThunkDispatch<BaseStoreState, void, Action>, getState: () => BaseStoreState) => {
-        console.log('app start');
         // check and see if we are in an iframe
         let iframeParams = getParamsFromDOM();
-        console.log('[app start] iframe params', iframeParams);
         if (!iframeParams) {
             return;
         }
@@ -132,8 +125,6 @@ export function appStart() {
         //     devMode = true;
         // }
 
-        // console.log('where are we?', iframeParams);
-
         // A plugin will wait until receiving a 'start' message. The
         // start message contains enough data for most apps to start
         // going, including core service configuration and communication
@@ -141,7 +132,6 @@ export function appStart() {
         channel.on(
             'start',
             (params: any) => {
-                console.log('starting (action)!', params);
                 const services = params.config.services;
 
                 dispatch(
@@ -209,7 +199,6 @@ export function appStart() {
         // associated actions like this one) to the ui to indicate that the initial code is loaded
         // and it is ready for further instructions (which in all likelihood is the 'start'
         // message handled above.)
-        console.log('sending ready', channel.id);
         channel.send('ready', {
             channelId: channel.id,
             greeting: 'heloooo'
@@ -221,12 +210,11 @@ export function appStart() {
         };
         window.document.body.addEventListener('click', windowListener);
 
-        console.log('integration app start action finished');
+        ('integration app start action finished');
 
         // dispatch(appStartSuccess(channelId));
 
         // channel.on('set-title', ({ title }) => {
-        //     console.log('setting title?', title);
         //     dispatch(appSetTitle(title));
         // });
     };
@@ -248,7 +236,6 @@ export interface SendMessage {
 
 export function sendMessage(messageName: string, payload: object) {
     return (dispatch: ThunkDispatch<BaseStoreState, void, Action>, getState: () => BaseStoreState) => {
-        console.log('sending message?', messageName, payload);
         channel.send(messageName, payload);
     };
 }

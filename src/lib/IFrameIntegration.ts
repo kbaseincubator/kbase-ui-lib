@@ -10,8 +10,6 @@ function findHostElement(): Element | null {
 }
 
 export function getParamsFromIFrame() {
-    console.log('integration', window.frameElement);
-
     const hostNode = findHostElement();
 
     if (!hostNode) {
@@ -33,7 +31,6 @@ export function getParamsFromIFrame() {
 
 export function getParamsFromDOM() {
     const hostNode = findHostElement();
-    console.log('[getParamsFromDOM]', hostNode);
     if (!hostNode) {
         return null;
     }

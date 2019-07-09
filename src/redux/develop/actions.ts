@@ -82,10 +82,7 @@ function setupAndStartChannel(channel: Channel, dispatch: ThunkDispatch<BaseStor
         const auth = new Auth(devConfig.services.Auth.url);
         const authInfo = await auth.checkAuth();
 
-        console.log('auth info?', authInfo);
-
         if (authInfo.status === AuthState.AUTHENTICATED) {
-            console.log('auth!!!', authInfo);
             channel.send('start', {
                 authorization: {
                     token: authInfo.userAuthorization!.token,
@@ -200,7 +197,6 @@ export function start(window: Window) {
         setupAndStartChannel(channel, dispatch);
 
         // set channel id via action
-        console.log('about to dispatch load success for develop wrapper...', channel.id);
         dispatch(loadSuccess(channel.id));
 
         // set up channel handlers, etc.

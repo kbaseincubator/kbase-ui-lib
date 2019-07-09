@@ -14,7 +14,6 @@ function setTitle(state: BaseStoreState, action: DevelopSetTitle): BaseStoreStat
 }
 
 function loadSuccess(state: BaseStoreState, action: DevelopLoadSuccess): BaseStoreState {
-    console.log('starting develop mode...', action);
     return {
         ...state,
         root: {

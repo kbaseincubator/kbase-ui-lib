@@ -225,7 +225,6 @@ export default class Develop extends React.Component<DevelopProps, DevelopCompon
     }
 
     render() {
-        // console.log('[develop] render');
         // if (this.props.rootState !== RootState.DEVELOP) {
         //     return <React.Fragment>{this.props.children}</React.Fragment>;
         // }

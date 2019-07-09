@@ -32,8 +32,6 @@ export function mapStateToProps(state: BaseStoreState, props: OwnProps): StatePr
         auth
     } = state;
 
-    console.log('dev index', developStatus, hostChannelId);
-
     return {
         title,
         hostChannelId,
