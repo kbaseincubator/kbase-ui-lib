@@ -109,7 +109,7 @@ export function appStart() {
         // set up the plugin message bus.
 
         const hostChannelId = iframeParams.channelId;
-        const channel = new Channel({
+        channel = new Channel({
             to: hostChannelId,
             debug: false
         });

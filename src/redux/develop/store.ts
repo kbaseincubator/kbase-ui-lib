@@ -15,7 +15,7 @@ export interface DevelopStoreState {
 export function makeDevelopStore(): DevelopStoreState {
     return {
         develop: {
-            title: 'well, hello there.',
+            title: 'SET TITLE HERE',
             status: DevelopStatus.NONE
         }
     };
