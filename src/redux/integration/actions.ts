@@ -15,6 +15,7 @@ export enum ActionType {
     APP_LOAD_SUCCESS = 'app load success',
     APP_LOAD_ERROR = 'app load error',
     APP_SEND_MESSAGE = 'app/send/message',
+    APP_SEND_TITLE = 'app/send/title',
     APP_SET_TITLE = 'app/set/title'
 }
 
@@ -36,6 +37,11 @@ export interface AppLoadError extends Action {
     error: AppError;
 }
 
+export interface AppSendTitle extends Action<ActionType.APP_SEND_TITLE> {
+    type: ActionType.APP_SEND_TITLE;
+    title: string;
+}
+
 export interface AppSetTitle extends Action<ActionType.APP_SET_TITLE> {
     type: ActionType.APP_SET_TITLE;
     title: string;
@@ -43,7 +49,7 @@ export interface AppSetTitle extends Action<ActionType.APP_SET_TITLE> {
 
 // Action Creators
 
-export function appLoadSuccess(config: AppConfig, runtime: AppRuntime): AppLoadSuccess {
+export function loadSuccess(config: AppConfig, runtime: AppRuntime): AppLoadSuccess {
     return {
         type: ActionType.APP_LOAD_SUCCESS,
         config,
@@ -51,38 +57,29 @@ export function appLoadSuccess(config: AppConfig, runtime: AppRuntime): AppLoadS
     };
 }
 
-export function appLoadError(error: AppError): AppLoadError {
+export function loadError(error: AppError): AppLoadError {
     return {
         type: ActionType.APP_LOAD_ERROR,
         error
     };
 }
 
-export function appSetTitle(title: string) {
+export function sendTitle(title: string) {
     return async (dispatch: ThunkDispatch<BaseStoreState, void, Action>, getState: () => BaseStoreState) => {
-        // const {
-        //     root: { hostChannelId }
-        //     // app: {
-        //     //     runtime: { hostChannelId }
-        //     // }
-        // } = getState();
-
-        //   if (!channelId) {
-        //     console.warn("Trying to set title without a channel!");
-        //     return;
-        //   }
-
-        //   if (!hostChannelId) {
-        //     console.warn("Trying to set title without a host channel!");
-        //     return;
-        //   }
-
         if (!channel) {
             console.warn('Trying to set title without a channel!');
             return;
         }
 
         dispatch(sendMessage('set-title', { title }));
+        dispatch(setTitle(title));
+    };
+}
+
+export function setTitle(title: string): AppSetTitle {
+    return {
+        type: ActionType.APP_SET_TITLE,
+        title
     };
 }
 
@@ -135,7 +132,7 @@ export function appStart() {
                 const services = params.config.services;
                 console.log('got start with ', params);
                 dispatch(
-                    appLoadSuccess(
+                    loadSuccess(
                         {
                             baseUrl: '',
                             services: {
