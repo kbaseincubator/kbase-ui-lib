@@ -170,7 +170,7 @@ export function appStart() {
                             title: '',
                             navigation: {
                                 view: params.view,
-                                params: params.params
+                                params: params.params || {}
                             }   
                         }
                     )
