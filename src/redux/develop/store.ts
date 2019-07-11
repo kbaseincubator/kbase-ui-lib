@@ -9,6 +9,7 @@ export interface DevelopStoreState {
     develop: {
         title: string;
         status: DevelopStatus;
+        view: string;
     };
 }
 
@@ -16,7 +17,8 @@ export function makeDevelopStore(): DevelopStoreState {
     return {
         develop: {
             title: 'SET TITLE HERE',
-            status: DevelopStatus.NONE
+            status: DevelopStatus.NONE,
+            view: ''
         }
     };
 }

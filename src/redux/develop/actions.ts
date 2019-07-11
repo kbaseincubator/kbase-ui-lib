@@ -9,8 +9,11 @@ import { sendMessage } from '../integration/actions';
 export enum DevelopActionType {
     DEVELOP_SET_TITLE = 'develop/set/title',
     DEVELOP_START = 'develop/start',
-    DEVELOP_LOAD_SUCCESS = 'develop/load/success'
+    DEVELOP_LOAD_SUCCESS = 'develop/load/success',
+    DEVELOP_SET_VIEW = 'develop/set/view'
 }
+
+// Action Types
 
 export interface DevelopSetTitle extends Action<DevelopActionType.DEVELOP_SET_TITLE> {
     type: DevelopActionType.DEVELOP_SET_TITLE;
@@ -26,6 +29,13 @@ export interface DevelopLoadSuccess extends Action<DevelopActionType.DEVELOP_LOA
     type: DevelopActionType.DEVELOP_LOAD_SUCCESS;
     hostChannelId: string;
 }
+
+export interface DevelopSetView extends Action<DevelopActionType.DEVELOP_SET_VIEW> {
+    type: DevelopActionType.DEVELOP_SET_VIEW,
+    view: string
+}
+
+// Action generators
 
 export function setTitle(title: string): DevelopSetTitle {
     return {
@@ -92,9 +102,8 @@ function setupAndStartChannel(channel: Channel, dispatch: ThunkDispatch<BaseStor
                 },
                 config: devConfig,
                 // TODO: refactor this to reflect the actual view and params in the dev tool.
-                view: 'main',
+                view: '',
                 params: {
-                    tab: 'user-jobs'
                 }
             });
         } else {

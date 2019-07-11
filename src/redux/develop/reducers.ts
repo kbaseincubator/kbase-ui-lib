@@ -1,6 +1,6 @@
 import { Action, Reducer } from 'redux';
-import { DevelopStoreState, DevelopStatus } from './store';
-import { DevelopActionType, DevelopSetTitle, DevelopStart, DevelopLoadSuccess } from './actions';
+import { DevelopStatus } from './store';
+import { DevelopActionType, DevelopSetTitle, DevelopLoadSuccess, DevelopSetView } from './actions';
 import { BaseStoreState } from '../store';
 
 function setTitle(state: BaseStoreState, action: DevelopSetTitle): BaseStoreState {
@@ -27,6 +27,26 @@ function loadSuccess(state: BaseStoreState, action: DevelopLoadSuccess): BaseSto
     };
 }
 
+function setView(state: BaseStoreState, action: DevelopSetView): BaseStoreState {
+    return {
+        ...state,
+        app: {
+            ...state.app,
+            runtime: {
+                ...state.app.runtime,
+                navigation: {
+                    ...state.app.runtime.navigation,
+                    view: action.view
+                }
+            }
+        },
+        develop: {
+            ...state.develop,
+            view: action.view
+        }
+    }
+}
+
 const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreState | undefined, action: Action) => {
     if (!state) {
         return state;
@@ -37,6 +57,8 @@ const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreSt
             return setTitle(state, action as DevelopSetTitle);
         case DevelopActionType.DEVELOP_LOAD_SUCCESS:
             return loadSuccess(state, action as DevelopLoadSuccess);
+        case DevelopActionType.DEVELOP_SET_VIEW:
+            return setView(state, action as DevelopSetView);
         default:
             return;
     }
