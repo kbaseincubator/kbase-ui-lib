@@ -133,7 +133,7 @@ export function appStart() {
             'start',
             (params: any) => {
                 const services = params.config.services;
-
+                console.log('got start with ', params);
                 dispatch(
                     appLoadSuccess(
                         {
@@ -170,7 +170,11 @@ export function appStart() {
                             channelId: channel.id,
                             hostChannelId,
                             devMode,
-                            title: ''
+                            title: '',
+                            navigation: {
+                                view: params.view,
+                                params: params.params
+                            }   
                         }
                     )
                 );

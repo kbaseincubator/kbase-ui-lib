@@ -90,7 +90,12 @@ function setupAndStartChannel(channel: Channel, dispatch: ThunkDispatch<BaseStor
                     realname: authInfo.userAuthorization!.realname,
                     roles: authInfo.userAuthorization!.roles
                 },
-                config: devConfig
+                config: devConfig,
+                // TODO: refactor this to reflect the actual view and params in the dev tool.
+                view: 'main',
+                params: {
+                    tab: 'user-jobs'
+                }
             });
         } else {
             channel.send('start', {
