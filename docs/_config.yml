@@ -10,3 +10,4 @@ navigation:
     menu:
         - label: Testing
         - label: Updating npm package
+        - label: Development

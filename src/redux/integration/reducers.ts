@@ -1,9 +1,9 @@
 import { Action, Reducer } from 'redux';
 import { AppState } from './store';
-import { AppLoadSuccess, ActionType, sendMessage, SendMessage, AppSetTitle } from './actions';
+import { AppLoadSuccess, ActionType, AppSetTitle } from './actions';
 import { BaseStoreState } from '../store';
 
-function appLoadSuccess(state: BaseStoreState, action: AppLoadSuccess): BaseStoreState {
+function loadSuccess(state: BaseStoreState, action: AppLoadSuccess): BaseStoreState {
     return {
         ...state,
         app: {
@@ -14,8 +14,7 @@ function appLoadSuccess(state: BaseStoreState, action: AppLoadSuccess): BaseStor
     };
 }
 
-function appSetTitle(state: BaseStoreState, action: AppSetTitle): BaseStoreState {
-    console.log('set title reducer', action.title);
+function setTitle(state: BaseStoreState, action: AppSetTitle): BaseStoreState {
     return {
         ...state,
         app: {
@@ -24,6 +23,10 @@ function appSetTitle(state: BaseStoreState, action: AppSetTitle): BaseStoreState
                 ...state.app.runtime,
                 title: action.title
             }
+        },
+        develop: {
+            ...state.develop,
+            title: action.title
         }
     };
 }
@@ -36,9 +39,9 @@ const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreSt
     // function reducer(state: BaseStoreState, action: Action): BaseStoreState | null {
     switch (action.type) {
         case ActionType.APP_LOAD_SUCCESS:
-            return appLoadSuccess(state, action as AppLoadSuccess);
+            return loadSuccess(state, action as AppLoadSuccess);
         case ActionType.APP_SET_TITLE:
-            return appSetTitle(state, action as AppSetTitle);
+            return setTitle(state, action as AppSetTitle);
         // case ActionType. APP_SEND_MESSAGE:
         //     return sendMessage(state, action as SendMessage);
         default:

@@ -1,3 +1,6 @@
 node_modules
 coverage
 api-docs
+_attic
+/lib
+build

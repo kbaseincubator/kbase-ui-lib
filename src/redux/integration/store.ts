@@ -9,6 +9,11 @@ export enum AppState {
     ERROR
 }
 
+export interface Navigation {
+    view: string;
+    params: object
+}
+
 export interface AppConfig {
     baseUrl: string;
     services: {
@@ -42,7 +47,10 @@ export interface AppConfig {
 
 export interface AppRuntime {
     channelId: string | null;
+    hostChannelId: string | null;
+    devMode: boolean | null;
     title: string;
+    navigation: Navigation
 }
 
 export interface AppStoreState {
@@ -90,8 +98,15 @@ export function makeIntegrationStoreInitialState(): AppStoreState {
             },
             runtime: {
                 channelId: null,
-                title: ''
-            }
+                hostChannelId: null,
+                devMode: null,
+                title: '',
+                navigation: {
+                    view: '',
+                    params: {}
+                }
+            },
+            
         }
     };
 }
