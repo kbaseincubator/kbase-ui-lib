@@ -144,7 +144,7 @@ export class Channel {
 
         this.unwelcomeReceivedCount = 0;
         this.unwelcomeReceivedCountThreshhold = 100;
-        this.unwelcomeReceiptWarning = true;
+        this.unwelcomeReceiptWarning = false;
         this.unwelcomeReceiptWarningCount = 0;
         this.currentListener = null;
     }
