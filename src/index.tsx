@@ -12,3 +12,4 @@ export { default as NiceTimeDuration } from './components/NiceTimeDuration';
 export { default as NiceRelativeTime } from './components/NiceRelativeTime';
 export { appSetTitle } from './redux/integration/actions';
 export { default as AuthGate } from './components/AuthGate';
+export { setView } from './redux/develop/actions';
