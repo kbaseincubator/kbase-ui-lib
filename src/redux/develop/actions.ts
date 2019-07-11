@@ -4,13 +4,13 @@ import { BaseStoreState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppConfig } from '../integration/store';
 import Auth, { AuthState } from '../../lib/Auth';
-import { sendMessage } from '../integration/actions';
 
 export enum DevelopActionType {
     DEVELOP_SET_TITLE = 'develop/set/title',
     DEVELOP_START = 'develop/start',
     DEVELOP_LOAD_SUCCESS = 'develop/load/success',
-    DEVELOP_SET_VIEW = 'develop/set/view'
+    DEVELOP_SET_VIEW = 'develop/set/view',
+    DEVELOP_SET_PARAMS = 'develop/set/params'
 }
 
 // Action Types
@@ -35,6 +35,12 @@ export interface DevelopSetView extends Action<DevelopActionType.DEVELOP_SET_VIE
     view: string
 }
 
+export interface DevelopSetParams extends Action<DevelopActionType.DEVELOP_SET_PARAMS> {
+    type: DevelopActionType.DEVELOP_SET_PARAMS,
+    // TODO: can we make params generic?
+    params: object
+}
+
 // Action generators
 
 export function setTitle(title: string): DevelopSetTitle {
@@ -55,6 +61,13 @@ export function setView(view: string): DevelopSetView {
     return {
         type: DevelopActionType.DEVELOP_SET_VIEW,
         view
+    }
+}
+
+export function setParams(params: object): DevelopSetParams {
+    return {
+        type: DevelopActionType.DEVELOP_SET_PARAMS,
+        params
     }
 }
 

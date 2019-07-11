@@ -1,6 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { DevelopStatus } from './store';
-import { DevelopActionType, DevelopSetTitle, DevelopLoadSuccess, DevelopSetView } from './actions';
+import { DevelopActionType, DevelopSetTitle, DevelopLoadSuccess, DevelopSetView, DevelopSetParams } from './actions';
 import { BaseStoreState } from '../store';
 
 function setTitle(state: BaseStoreState, action: DevelopSetTitle): BaseStoreState {
@@ -47,6 +47,26 @@ function setView(state: BaseStoreState, action: DevelopSetView): BaseStoreState 
     }
 }
 
+function setParams(state: BaseStoreState, action: DevelopSetParams): BaseStoreState {
+    return {
+        ...state,
+        app: {
+            ...state.app,
+            runtime: {
+                ...state.app.runtime,
+                navigation: {
+                    ...state.app.runtime.navigation,
+                    params: action.params
+                }
+            }
+        },
+        develop: {
+            ...state.develop,
+            params: action.params
+        }
+    }
+}
+
 const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreState | undefined, action: Action) => {
     if (!state) {
         return state;
@@ -59,6 +79,8 @@ const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreSt
             return loadSuccess(state, action as DevelopLoadSuccess);
         case DevelopActionType.DEVELOP_SET_VIEW:
             return setView(state, action as DevelopSetView);
+        case DevelopActionType.DEVELOP_SET_PARAMS:
+            return setParams(state, action as DevelopSetParams);
         default:
             return;
     }
