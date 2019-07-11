@@ -51,6 +51,13 @@ export function loadSuccess(hostChannelId: string): DevelopLoadSuccess {
     };
 }
 
+export function setView(view: string): DevelopSetView {
+    return {
+        type: DevelopActionType.DEVELOP_SET_VIEW,
+        view
+    }
+}
+
 let channel: Channel;
 
 const devConfig: AppConfig = {
