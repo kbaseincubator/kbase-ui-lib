@@ -129,57 +129,64 @@ export function appStart() {
         channel.on(
             'start',
             (params: any) => {
-                const services = params.config.services;
-                console.log('got start with ', params);
-                dispatch(
-                    loadSuccess(
-                        {
-                            baseUrl: '',
-                            services: {
-                                Groups: {
-                                    url: services.Groups.url
+                try {
+                    const services = params.config.services;
+                    dispatch(
+                        loadSuccess(
+                            {
+                                baseUrl: '', 
+                                services: {
+                                    Groups: {
+                                        url: services.Groups.url
+                                    },
+                                    UserProfile: {
+                                        url: services.UserProfile.url
+                                    },
+                                    Workspace: {
+                                        url: services.Workspace.url
+                                    },
+                                    ServiceWizard: {
+                                        url: services.ServiceWizard.url
+                                    },
+                                    Auth: {
+                                        url: services.Auth.url
+                                    },
+                                    NarrativeMethodStore: {
+                                        url: services.NarrativeMethodStore.url
+                                    },
+                                    Catalog: {
+                                        url: services.Catalog.url
+                                    },
+                                    NarrativeJobService: {
+                                        url: services.NarrativeJobService.url
+                                    }
                                 },
-                                UserProfile: {
-                                    url: services.UserProfile.url
-                                },
-                                Workspace: {
-                                    url: services.Workspace.url
-                                },
-                                ServiceWizard: {
-                                    url: services.ServiceWizard.url
-                                },
-                                Auth: {
-                                    url: services.Auth.url
-                                },
-                                NarrativeMethodStore: {
-                                    url: services.NarrativeMethodStore.url
-                                },
-                                Catalog: {
-                                    url: services.Catalog.url
-                                },
-                                NarrativeJobService: {
-                                    url: services.NarrativeJobService.url
-                                }
+                                defaultPath: '/'
                             },
-                            defaultPath: '/'
-                        },
-                        {
-                            channelId: channel.id,
-                            hostChannelId,
-                            devMode,
-                            title: '',
-                            navigation: {
-                                view: params.view,
-                                params: params.params
-                            }   
-                        }
-                    )
-                );
+                            {
+                                channelId: channel.id,
+                                hostChannelId,
+                                devMode,
+                                title: '',
+                                navigation: {
+                                    view: params.view,
+                                    params: params.params || {}
+                                }   
+                            }
+                        )
+                    );
 
-                if (params.authorization) {
-                    const { token, username, realname, roles } = params.authorization;
-                    dispatch(authAuthorized(token, username, realname, roles));
+                    if (params.authorization) {
+                        const { token, username, realname, roles } = params.authorization;
+                        dispatch(authAuthorized(token, username, realname, roles));
+                    }
+                } catch (ex) {
+                    channel.send('start-error', {
+                        message: ex.message
+                    })
                 }
+
+                channel.send('started', {});
             },
             (err: Error) => {
                 console.error('Error starting...', err);
