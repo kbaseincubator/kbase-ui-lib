@@ -176,7 +176,7 @@ export default class Develop extends React.Component<DevelopProps, DevelopCompon
         };
         const paramsString = JSON.stringify(params);
         return (
-            <div data-params={encodeURIComponent(paramsString)} data-plugin-host="true">
+            <div data-params={encodeURIComponent(paramsString)} data-plugin-host="true" className="Develop">
                 <div className="Develop-area">
                     <Tag>Develop Mode Area</Tag>
                     {this.renderTitleToolbar()}
