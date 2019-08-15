@@ -8,10 +8,10 @@ export enum AppState {
     READY,
     ERROR
 }
-
+export type Params = { [key: string]: string };
 export interface Navigation {
     view: string;
-    params: { [key: string]: string }
+    params: Params
 }
 
 export interface AppConfig {

@@ -2,7 +2,7 @@ import { Action } from 'redux';
 import { Channel } from '../../lib/windowChannel';
 import { BaseStoreState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
-import { AppConfig } from '../integration/store';
+import { AppConfig, Params } from '../integration/store';
 import Auth, { AuthState } from '../../lib/Auth';
 
 export enum DevelopActionType {
@@ -38,7 +38,7 @@ export interface DevelopSetView extends Action<DevelopActionType.DEVELOP_SET_VIE
 export interface DevelopSetParams extends Action<DevelopActionType.DEVELOP_SET_PARAMS> {
     type: DevelopActionType.DEVELOP_SET_PARAMS,
     // TODO: can we make params generic?
-    params: object
+    params: Params
 }
 
 // Action generators
@@ -64,7 +64,7 @@ export function setView(view: string): DevelopSetView {
     }
 }
 
-export function setParams(params: object): DevelopSetParams {
+export function setParams(params: Params): DevelopSetParams {
     return {
         type: DevelopActionType.DEVELOP_SET_PARAMS,
         params

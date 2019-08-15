@@ -1,3 +1,5 @@
+import { Params } from "../integration/store";
+
 export enum DevelopStatus {
     NONE = 'developStatus/none',
     LOADING = 'developStatus/loading',
@@ -10,7 +12,7 @@ export interface DevelopStoreState {
         title: string;
         status: DevelopStatus;
         view: string;
-        params: object;
+        params: Params;
     };
 }
 
