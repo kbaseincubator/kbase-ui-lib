@@ -11,7 +11,7 @@ export enum AppState {
 
 export interface Navigation {
     view: string;
-    params: object
+    params: { [key: string]: string }
 }
 
 export interface AppConfig {

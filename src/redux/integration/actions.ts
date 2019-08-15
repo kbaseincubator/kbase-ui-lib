@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { AppConfig, AppRuntime } from './store';
+import { AppConfig, AppRuntime, Navigation } from './store';
 import { AppError, BaseStoreState } from '../store';
 import { Channel } from '../../lib/windowChannel';
 import { getParamsFromDOM } from '../../lib/IFrameIntegration';
@@ -10,13 +10,14 @@ import { authAuthorized } from '../auth/actions';
 // Action types
 
 export enum ActionType {
-    APP_LOAD = 'app load',
-    APP_LOAD_START = 'app load start',
-    APP_LOAD_SUCCESS = 'app load success',
-    APP_LOAD_ERROR = 'app load error',
-    APP_SEND_MESSAGE = 'app/send/message',
-    APP_SEND_TITLE = 'app/send/title',
-    APP_SET_TITLE = 'app/set/title'
+    APP_LOAD = '@kbase-ui-lib/app/load',
+    APP_LOAD_START = '@kbase-ui-lib/app/load/start',
+    APP_LOAD_SUCCESS = '@kbase-ui-lib/app/load/success',
+    APP_LOAD_ERROR = '@kbase-ui-lib/app/load/error',
+    APP_SEND_MESSAGE = '@kbase-ui-lib/app/send/message',
+    APP_SEND_TITLE = '@kbase-ui-lib/app/send/title',
+    APP_SET_TITLE = '@kbase-ui-lib/app/set/title',
+    APP_NAVIGATE = '@kbase-ui-lib/app/navigate'
 }
 
 // Action Definitions
@@ -47,6 +48,10 @@ export interface AppSetTitle extends Action<ActionType.APP_SET_TITLE> {
     title: string;
 }
 
+export interface AppNavigate extends Action<ActionType.APP_NAVIGATE> {
+    type: ActionType.APP_NAVIGATE,
+    navigation: Navigation
+}
 // Action Creators
 
 export function loadSuccess(config: AppConfig, runtime: AppRuntime): AppLoadSuccess {
@@ -81,6 +86,13 @@ export function setTitle(title: string): AppSetTitle {
         type: ActionType.APP_SET_TITLE,
         title
     };
+}
+
+export function navigate(navigation: Navigation) {
+    return {
+        type: ActionType.APP_NAVIGATE,
+        navigation
+    }
 }
 
 let channel: Channel;
@@ -193,13 +205,16 @@ export function appStart() {
             }
         );
 
-        // channel.on(
-        //     'navigate',
-        //     ({ to, params }) => {},
-        //     (err) => {
-        //         console.error('Error processing "navigate" message');
-        //     }
-        // );
+        channel.on(
+            'navigate',
+            ({ to, params }) => {
+                console.log('navigation?', to, params);
+                dispatch(navigate({view: to, params: params}));
+            },
+            (err) => {
+                console.error('Error processing "navigate" message');
+            }
+        );
 
         channel.start();
 

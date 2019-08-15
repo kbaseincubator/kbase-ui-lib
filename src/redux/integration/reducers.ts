@@ -1,6 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { AppState } from './store';
-import { AppLoadSuccess, ActionType, AppSetTitle } from './actions';
+import { AppLoadSuccess, ActionType, AppSetTitle, AppNavigate } from './actions';
 import { BaseStoreState } from '../store';
 
 function loadSuccess(state: BaseStoreState, action: AppLoadSuccess): BaseStoreState {
@@ -31,6 +31,19 @@ function setTitle(state: BaseStoreState, action: AppSetTitle): BaseStoreState {
     };
 }
 
+function navigate(state: BaseStoreState, action: AppNavigate): BaseStoreState {
+    return {
+        ...state,
+        app: {
+            ...state.app,
+            runtime: {
+                ...state.app.runtime,
+                navigation: action.navigation
+            }
+        }
+    }
+}
+
 const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreState | undefined, action: Action) => {
     if (!state) {
         return state;
@@ -44,6 +57,8 @@ const reducer: Reducer<BaseStoreState | undefined, Action> = (state: BaseStoreSt
             return setTitle(state, action as AppSetTitle);
         // case ActionType. APP_SEND_MESSAGE:
         //     return sendMessage(state, action as SendMessage);
+        case ActionType.APP_NAVIGATE:
+            return navigate(state, action as AppNavigate);
         default:
             return;
     }
