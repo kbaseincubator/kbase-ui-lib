@@ -32,6 +32,7 @@ function setTitle(state: BaseStoreState, action: AppSetTitle): BaseStoreState {
 }
 
 function navigate(state: BaseStoreState, action: AppNavigate): BaseStoreState {
+    // console.log('navigate, setting', action);
     return {
         ...state,
         app: {

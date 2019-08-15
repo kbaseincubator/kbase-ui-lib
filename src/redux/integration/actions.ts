@@ -89,6 +89,7 @@ export function setTitle(title: string): AppSetTitle {
 }
 
 export function navigate(navigation: Navigation) {
+    // console.log('navigate action creator', navigation);
     return {
         type: ActionType.APP_NAVIGATE,
         navigation
@@ -208,7 +209,7 @@ export function appStart() {
         channel.on(
             'navigate',
             ({ to, params }) => {
-                console.log('navigation?', to, params);
+                // console.log('navigation?', to, params);
                 dispatch(navigate({view: to, params: params}));
             },
             (err) => {
