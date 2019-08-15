@@ -101,15 +101,15 @@ export class ServiceWizardClient extends AuthorizedServiceClient<ServiceWizardCl
         if (result.result && result.result.length > 0) {
             const theResult = result.result[0];
             if (!theResult) {
-                throw new Error('Crazy at it seems, no result');
+                throw new Error('Crazy as it seems, result is falsy');
             }
             if (isGetServiceStatusResult(theResult)) {
                 return theResult;
             } else {
-                throw new Error('Sorry, not the expected type "GetServiceStatusResult"');
+                throw new Error('Sorry, result does not conform to "GetServiceStatusResult"');
             }
         } else {
-            throw new Error('Crazy at it seems, no result');
+            throw new Error('Crazy as it seems, no result');
         }
     }
 }
