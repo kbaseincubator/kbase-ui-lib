@@ -278,7 +278,7 @@ export class DynamicServiceClient {
         }
     }
 
-    options() {
+    private options() {
         return {
             timeout: this.timeout,
             authorization: this.token,
@@ -286,11 +286,11 @@ export class DynamicServiceClient {
         };
     }
 
-    getModule() {
+    private getModule() {
         return (this.constructor as typeof DynamicServiceClient).module;
     }
 
-    moduleId() {
+    private moduleId() {
         let moduleId;
         if (!this.version) {
             moduleId = this.getModule() + ':auto';
@@ -300,7 +300,7 @@ export class DynamicServiceClient {
         return moduleId;
     }
 
-    getCached(fetcher: () => Bluebird<any>) {
+    private getCached(fetcher: () => Bluebird<any>) {
         return moduleCache.getItemWithWait({
             id: this.moduleId(),
             fetcher: fetcher
@@ -311,7 +311,7 @@ export class DynamicServiceClient {
     //     moduleCache.setItem(this.moduleId(), value);
     // }
 
-    lookupModule() {
+    private lookupModule() {
         return this.getCached(
             (): Bluebird<any> => {
                 const client = new ServiceWizardClient({
@@ -329,7 +329,7 @@ export class DynamicServiceClient {
         );
     }
 
-    callFunc<T>(funcName: string, params: any) {
+    protected callFunc<T>(funcName: string, params: any) {
         return this.lookupModule()
             .then((serviceStatus) => {
                 const client = new AuthorizedGenericClient({

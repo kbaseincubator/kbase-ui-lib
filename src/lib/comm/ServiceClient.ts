@@ -76,7 +76,7 @@ export abstract class AuthorizedServiceClient<T extends AuthorizedServiceClientC
         this.token = params.token;
     }
 
-    callFunc(func: string, param: any): Promise<JSONResponse> {
+    protected callFunc(func: string, param: any): Promise<JSONResponse> {
         return new Promise((resolve, reject) => {
             const abortController = new AbortController();
 

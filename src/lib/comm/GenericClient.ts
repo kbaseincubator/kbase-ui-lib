@@ -70,7 +70,7 @@ export class GenericClient {
         this.module = module;
     }
 
-    makePayload(method: string, param: any): JSONPayload {
+    protected makePayload(method: string, param: any): JSONPayload {
         return {
             version: '1.1',
             method: this.module + '.' + method,
@@ -79,7 +79,7 @@ export class GenericClient {
         };
     }
 
-    makeEmptyPayload(method: string): JSONPayload {
+    protected makeEmptyPayload(method: string): JSONPayload {
         return {
             version: '1.1',
             method: this.module + '.' + method,
@@ -88,7 +88,7 @@ export class GenericClient {
         };
     }
 
-    async processResponse<T>(response: Response): Promise<T> {
+    protected async processResponse<T>(response: Response): Promise<T> {
         if (response.status === 200) {
             const { result } = await response.json();
             return result as T;
@@ -114,7 +114,7 @@ export class GenericClient {
         throw new Error('Unexpected response: ' + response.status + ', ' + response.statusText);
     }
 
-    async callFunc<T>(func: string, param: any): Promise<T> {
+    protected async callFunc<T>(func: string, param: any): Promise<T> {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
