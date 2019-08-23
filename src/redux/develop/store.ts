@@ -12,7 +12,7 @@ export interface DevelopStoreState {
         title: string;
         status: DevelopStatus;
         view: string;
-        params: Params;
+        params: Params<string>;
     };
 }
 

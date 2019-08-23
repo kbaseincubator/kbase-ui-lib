@@ -38,7 +38,7 @@ export interface DevelopSetView extends Action<DevelopActionType.DEVELOP_SET_VIE
 export interface DevelopSetParams extends Action<DevelopActionType.DEVELOP_SET_PARAMS> {
     type: DevelopActionType.DEVELOP_SET_PARAMS,
     // TODO: can we make params generic?
-    params: Params
+    params: Params<string>
 }
 
 // Action generators
@@ -64,7 +64,7 @@ export function setView(view: string): DevelopSetView {
     }
 }
 
-export function setParams(params: Params): DevelopSetParams {
+export function setParams(params: Params<string>): DevelopSetParams {
     return {
         type: DevelopActionType.DEVELOP_SET_PARAMS,
         params
