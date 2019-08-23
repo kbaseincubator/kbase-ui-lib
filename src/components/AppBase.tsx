@@ -3,12 +3,14 @@
  */
 import * as React from 'react';
 import './AppBase.css';
+import "typeface-oxygen";
+import "typeface-roboto";
 import '../style/fonts.css';
 import '../style/common.css';
 import KBaseIntegrationLoader from './Integration';
 import Root from './Root';
 // import 'antd/dist/antd.css';
-// import "typeface-oxygen";
+
 
 export interface AppProps {}
 

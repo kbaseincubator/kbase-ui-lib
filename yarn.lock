@@ -5737,6 +5737,11 @@ typeface-oxygen@^0.0.72:
   resolved "https://registry.yarnpkg.com/typeface-oxygen/-/typeface-oxygen-0.0.72.tgz#7c3a187b45bb112ca53d2953ba10018af1eb270f"
   integrity sha512-wDLMaWKrq/P6Y3dDfrgy8JEQXfminKhzkXeQsN5XeOo9TWMJIhetAggqZLM1H7/hkzy/j329c8imScgXefjudg==
 
+typeface-roboto@^0.0.75:
+  version "0.0.75"
+  resolved "https://registry.yarnpkg.com/typeface-roboto/-/typeface-roboto-0.0.75.tgz#98d5ba35ec234bbc7172374c8297277099cc712b"
+  integrity sha512-VrR/IiH00Z1tFP4vDGfwZ1esNqTiDMchBEXYY9kilT6wRGgFoCAlgkEUMHb1E3mB0FsfZhv756IF0+R+SFPfdg==
+
 typescript@3.5.3, typescript@3.5.x:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"

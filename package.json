@@ -49,7 +49,8 @@
         "redux": "^4.0.1",
         "redux-thunk": "^2.3.0",
         "uuid": "^3.3.2",
-        "typeface-oxygen": "^0.0.72"
+        "typeface-oxygen": "^0.0.72",
+        "typeface-roboto": "^0.0.75"
     },
     "devDependencies": {
         "@types/enzyme": "3.10.3",
