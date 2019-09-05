@@ -6,3 +6,4 @@ export { default as NarrativeJobServiceClient } from './lib/coreServices/Narrati
 export { default as CatalogClient } from './lib/coreServices/Catalog';
 export { default as AuthClient } from './lib/coreServices/auth';
 export { niceDuration, niceElapsed, niceRelativeTime, NiceRelativeTimeOptions } from './lib/time'
+export { default as Auth, UserAuthorization, AuthState } from './lib/Auth';
