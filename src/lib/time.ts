@@ -1,37 +1,51 @@
-interface TimeUnit {
-    unit: string;
+interface TimeUnitInfo {
+    long: string;
     short: string;
     single: string;
     size: number;
+    unit: TimeUnit
 }
 
-const timeUnits: Array<TimeUnit> = [
+export enum TimeUnit {
+    MILLISECOND,
+    SECOND,
+    MINUTE,
+    HOUR,
+    DAY
+}
+
+const timeUnits: Array<TimeUnitInfo> = [
     {
-        unit: 'millisecond',
+        unit: TimeUnit.MILLISECOND,
+        long: 'millisecond',
         short: 'ms',
         single: 'm',
         size: 1000
     },
     {
-        unit: 'second',
+        unit: TimeUnit.SECOND,
+        long: 'second',
         short: 'sec',
         single: 's',
         size: 60
     },
     {
-        unit: 'minute',
+        unit: TimeUnit.MINUTE,
+        long: 'minute',
         short: 'min',
         single: 'm',
         size: 60
     },
     {
-        unit: 'hour',
+        unit: TimeUnit.HOUR,
+        long: 'hour',
         short: 'hr',
         single: 'h',
         size: 24
     },
     {
-        unit: 'day',
+        unit: TimeUnit.DAY,
+        long: 'day',
         short: 'day',
         single: 'd',
         size: 30
@@ -152,18 +166,18 @@ interface NiceDurationOptions {
     format?: Format;
 }
 
-function makeUnit(unit: TimeUnit, format: Format, value: number) {
+function makeUnit(unit: TimeUnitInfo, format: Format, value: number) {
     switch (format) {
-    case 'full':
-        const label = ' ' + unit.unit;
-        if (value !== 1) {
-            return label + 's';
-        }
-        return label;
-    case 'short':
-        return ' ' + unit.short;
-    case 'compact':
-        return unit.single;
+        case 'full':
+            const label = ' ' + unit.long;
+            if (value !== 1) {
+                return label + 's';
+            }
+            return label;
+        case 'short':
+            return ' ' + unit.short;
+        case 'compact':
+            return unit.single;
     }
 }
 
@@ -230,5 +244,72 @@ export function niceDuration(value: number, options: NiceDurationOptions = {}) {
                 return String(item.value) + item.label;
             })
             .join(' ');
+    }
+}
+
+export function niceElapsed(value: number, options: NiceDurationOptions = {}) {
+    const minimized = [];
+    const format = options.format || 'compact';
+    let temp = Math.abs(value);
+    const parts = timeUnits
+        .map(function (unit) {
+            // Get the remainder of the current value
+            // sans unit size of it composing the next
+            // measure.
+            const unitValue = temp % unit.size;
+            // Recompute the measure in terms of the next unit size.
+            temp = (temp - unitValue) / unit.size;
+
+            const unitLabel = makeUnit(unit, format, unitValue);
+
+            return {
+                label: unitLabel,
+                value: unitValue
+            };
+        })
+        .reverse();
+
+    parts.pop();
+
+    // We skip over large units which have no value until we
+    // hit the first unit with value. This effectively trims off
+    // zeros from the beginning.
+    // We also can limit the resolution with options.resolution, which
+    // limits the number of time units to display.
+    let keep = false;
+    for (let i = 0; i < parts.length; i += 1) {
+        if (!keep) {
+            if (parts[i].value > 0) {
+                keep = true;
+            } else {
+                continue;
+            }
+        }
+        if (options.precision && options.precision === minimized.length) {
+            break;
+        }
+        minimized.push(parts[i]);
+    }
+
+
+    if (minimized.length === 0) {
+        // This means that there is are no time measurements > 1 second.
+        return [
+            '<' + (format !== 'compact' ? ' ' : '') + '1' + makeUnit(timeUnits[1], format, 1),
+            minimized
+        ]
+    } else {
+        // Skip seconds if we are into the hours...
+        // if (minimized.length > 2) {
+        //     minimized.pop();
+        // }
+        return [
+            minimized
+                .map(function (item) {
+                    return String(item.value) + item.label;
+                })
+                .join(' '),
+            minimized
+        ];
     }
 }

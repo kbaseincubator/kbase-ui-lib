@@ -1,14 +1,19 @@
+import axios from 'axios';
+
 export interface GenericClientParams {
     url: string;
     module: string;
     token?: string;
+    timeout?: number;
 }
 
-export interface JSONPayload {
+const DEFAULT_TIMEOUT = 10000;
+
+export interface JSONPayload<T> {
     version: string;
     method: string;
     id: string;
-    params: any;
+    params: T;
 }
 
 export interface JSONRPCError {
@@ -63,14 +68,16 @@ export class GenericClient {
     url: string;
     token: string | null;
     module: string;
+    timeout?: number;
 
-    constructor({ url, token, module }: GenericClientParams) {
+    constructor({ url, token, module, timeout }: GenericClientParams) {
         this.url = url;
         this.token = token || null;
         this.module = module;
+        this.timeout = timeout || DEFAULT_TIMEOUT;
     }
 
-    protected makePayload(method: string, param: any): JSONPayload {
+    protected makePayload<T>(method: string, param: T): JSONPayload<T> {
         return {
             version: '1.1',
             method: this.module + '.' + method,
@@ -79,59 +86,76 @@ export class GenericClient {
         };
     }
 
-    protected makeEmptyPayload(method: string): JSONPayload {
-        return {
-            version: '1.1',
-            method: this.module + '.' + method,
-            id: String(Math.random()).slice(2),
-            params: []
-        };
-    }
+    // protected makeEmptyPayload<T>(method: string): JSONPayload<T> {
+    //     const params: Array<T> = [];
+    //     return {
+    //         version: '1.1',
+    //         method: this.module + '.' + method,
+    //         id: String(Math.random()).slice(2),
+    //         params
+    //     };
+    // }
 
-    protected async processResponse<T>(response: Response): Promise<T> {
-        if (response.status === 200) {
-            const { result } = await response.json();
-            return result as T;
-        } else if (response.status === 204) {
-            // The SDK has a weird edge case in which a method can specify no
-            // result, which is translated to a 204 response and no content.
-            // IMO it should return a valid json value, like null so we don't
-            // have to work around it.
-            // const result = null
-            // result as unknown as T
-            const result: unknown = null;
-            return result as T;
-        }
-        if (response.status === 500) {
-            if (response.headers.get('Content-Type') === 'application/json') {
-                const { error } = await response.json();
-                throw new JSONRPCException(error);
-            } else {
-                const text = await response.text();
-                throw new classJSONRPCServerException(text);
-            }
-        }
-        throw new Error('Unexpected response: ' + response.status + ', ' + response.statusText);
-    }
+    // protected async processResponse<T>(response: AxiosResponse): Promise<T> {
+    //     if (response.status === 200) {
+    //         const { result } = await response.json();
+    //         return result as T;
+    //     } else if (response.status === 204) {
+    //         // The SDK has a weird edge case in which a method can specify no
+    //         // result, which is translated to a 204 response and no content.
+    //         // IMO it should return a valid json value, like null so we don't
+    //         // have to work around it.
+    //         // const result = null
+    //         // result as unknown as T
+    //         const result: unknown = null;
+    //         return result as T;
+    //     }
+    //     if (response.status === 500) {
+    //         if (response.headers.get('Content-Type') === 'application/json') {
+    //             const { error } = await response.json();
+    //             throw new JSONRPCException(error);
+    //         } else {
+    //             const text = await response.text();
+    //             throw new classJSONRPCServerException(text);
+    //         }
+    //     }
+    //     throw new Error('Unexpected response: ' + response.status + ', ' + response.statusText);
+    // }
 
-    protected async callFunc<T>(func: string, param: any): Promise<T> {
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json');
+    // protected async callFunc<T>(func: string, param: any): Promise<T> {
+    //     const headers = new Headers();
+    //     headers.append('Content-Type', 'application/json');
+    //     headers.append('Accept', 'application/json');
+    //     if (this.token) {
+    //         headers.append('Authorization', this.token);
+    //     }
+    //     const response = await axios.post(this.url, this.makePayload(func, param), {
+    //         // mode: 'cors',
+    //         // cache: 'no-store',
+    //         headers
+    //     });
+    //     // The response may be a 200 success, a 200 with method error,
+    //     // an sdk 500 error, an internal 500 server error,
+    //     // or any other http error code.
+    //     return response.data as T
+    //     // return this.processResponse<T>(response);
+    // }
+
+    async callFunc<P, R>(func: string, param: P): Promise<R> {
+        // axios headers are ... any
+        const headers: any = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
         if (this.token) {
-            headers.append('Authorization', this.token);
+            headers['Authorization'] = this.token;
         }
-        const response = await fetch(this.url, {
-            method: 'POST',
-            mode: 'cors',
-            cache: 'no-store',
+        const params = this.makePayload<P>(func, param);
+        const response = await axios.post(this.url, params, {
             headers,
-            body: JSON.stringify(this.makePayload(func, param))
+            timeout: this.timeout
         });
-        // The response may be a 200 success, a 200 with method error,
-        // an sdk 500 error, an internal 500 server error,
-        // or any other http error code.
-        return this.processResponse<T>(response);
+        return response.data.result as R;
     }
 }
 
@@ -152,18 +176,17 @@ export class AuthorizedGenericClient extends GenericClient {
         this.token = params.token;
     }
 
-    async callFunc<T>(func: string, param: any): Promise<T> {
-        const response = await fetch(this.url, {
-            method: 'POST',
-            mode: 'cors',
-            cache: 'no-store',
-            headers: {
-                Authorization: this.token,
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-            body: JSON.stringify(this.makePayload(func, param))
+    async callFunc<P, R>(func: string, param: P): Promise<R> {
+        const params = this.makePayload<P>(func, param);
+        const headers: any = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': this.token,
+        }
+        const response = await axios.post(this.url, params, {
+            headers,
+            timeout: this.timeout
         });
-        return this.processResponse(response);
+        return response.data.result as R;
     }
 }

@@ -73,17 +73,17 @@ function isGetServiceStatusResult(x: any): x is GetServiceStatusResult {
 /**
  * Params structure for client constructor
  */
-export interface ServiceWizardClientParams extends AuthorizedServiceClientConstructorParams {}
+export interface ServiceWizardClientParams extends AuthorizedServiceClientConstructorParams { }
 
 /**
  * Params (input) structure for the get_service_status call
  */
-export interface GetServiceStatusParams extends Service {}
+export interface GetServiceStatusParams extends Service { }
 
 /**
  * Result (output) structure for the get_service_status call.
  */
-export interface GetServiceStatusResult extends ServiceStatus {}
+export interface GetServiceStatusResult extends ServiceStatus { }
 
 /**
  * The service wizard client.

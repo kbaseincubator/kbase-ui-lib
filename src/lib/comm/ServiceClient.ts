@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /**
  * Provides an abstract service client and authorized service client which can be used as the
  * basis for a core service client utilizing the jsonrpc model.
@@ -65,7 +67,7 @@ export interface AuthorizedServiceClientConstructorParams extends ServiceClientP
 
 export abstract class AuthorizedServiceClient<T extends AuthorizedServiceClientConstructorParams> extends ServiceClient<
     T
-> {
+    > {
     token: string;
 
     constructor(params: T) {
@@ -77,35 +79,38 @@ export abstract class AuthorizedServiceClient<T extends AuthorizedServiceClientC
     }
 
     protected callFunc(func: string, param: any): Promise<JSONResponse> {
+        // const cancelToken = axios.CancelToken.source();
         return new Promise((resolve, reject) => {
-            const abortController = new AbortController();
-
-            const connection = fetch(this.url, {
-                method: 'POST',
-                mode: 'cors',
-                cache: 'no-store',
+            const connection = axios.post(this.url, this.makePayload(func, param), {
+                // mode: 'cors',
+                // cache: 'no-store',
                 headers: {
                     Authorization: this.token!,
                     'Content-Type': 'application/json',
                     Accept: 'application/json'
                 },
-                signal: abortController.signal,
-                body: JSON.stringify(this.makePayload(func, param))
+                // body: JSON.stringify(),
+                // cancelToken,
+                timeout: this.timeout
             });
-            const startTime = Date.now();
-            const timeoutTimer = window.setTimeout(() => {
-                const elapsed = Date.now() - startTime;
-                abortController.abort();
-                reject(new Error(`Method call aborted due to timeout after ${elapsed} ms`));
-            }, this.timeout);
+            // const startTime = Date.now();
+            // const timeoutTimer = window.setTimeout(() => {
+            //     const elapsed = Date.now() - startTime;
+            //     cancelToken.cancel();
+            //     reject(new Error(`Method call aborted due to timeout after ${elapsed} ms`));
+            // }, this.timeout);
 
-            return connection.then((response) => {
-                window.clearTimeout(timeoutTimer);
-                if (response.status !== 200) {
-                    throw new Error('Request error: ' + response.status + ', ' + response.statusText);
-                }
-                resolve((response.json() as unknown) as JSONResponse);
-            });
+            connection.then((response) => {
+                // window.clearTimeout(timeoutTimer);
+                // if (response.status !== 200) {
+                //     reject(new Error('Request error: ' + response.status + ', ' + response.statusText));
+                // }
+                resolve(response.data as JSONResponse)
+                // resolve((response.json() as unknown) as JSONResponse);
+            })
+                .catch((err) => {
+                    reject(err);
+                })
         });
     }
 }
