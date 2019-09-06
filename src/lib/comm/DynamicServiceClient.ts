@@ -1,9 +1,8 @@
-import Bluebird from 'bluebird';
-import { ServiceWizardClient } from '../coreServices/ServiceWizard';
+import { ServiceWizardClient, GetServiceStatusResult } from '../coreServices/ServiceWizard';
 import { AuthorizedGenericClient } from './GenericClient';
 // now import the service wizard, and one auth generic client
 
-// type Promise<T> = Bluebird<T>
+// type Promise<T> = Promise<T>
 
 export interface CacheParams {
     itemLifetime: number;
@@ -16,9 +15,11 @@ export interface CacheItem<T> {
     id: string;
     value: T | null;
     createdAt: number;
-    fetcher: () => Bluebird<T>;
+    fetcher: () => Promise<T>;
     reserved: boolean;
 }
+
+export type Fetcher<T> = () => Promise<T>
 
 export class Cache<T> {
     cache: Map<string, CacheItem<T>>;
@@ -48,12 +49,12 @@ export class Cache<T> {
         this.isMonitoring = false;
     }
 
-    runMonitor() {
+    private runMonitor() {
         if (this.isMonitoring) {
             return;
         }
         this.isMonitoring = true;
-        window.setTimeout(() => {
+        setTimeout(() => {
             const newCache = new Map<string, any>();
             let cacheRenewed = false;
             Object.keys(this.cache).forEach((id) => {
@@ -71,17 +72,13 @@ export class Cache<T> {
         }, this.monitoringFrequency);
     }
 
-    isExpired(cacheItem: any) {
+    private isExpired(cacheItem: any) {
         const now = new Date().getTime();
         const elapsed = now - cacheItem.createdAt;
         return elapsed > this.cacheLifetime;
     }
 
-    isReserved(cacheItem: any) {
-        return cacheItem.reserved;
-    }
-
-    getItem(id: string) {
+    private getItem(id: string) {
         if (this.cache.get(id) === undefined) {
             return null;
         }
@@ -93,8 +90,19 @@ export class Cache<T> {
         return cached;
     }
 
-    reserveWaiter(item: CacheItem<T>): Bluebird<CacheItem<T>> {
-        return new Bluebird<CacheItem<T>>((resolve, reject) => {
+    /**
+     * Wait for a reserved item associated with id to become available, and then 
+     * return it.
+     * Implements this by polling for a given amount of time, with a given pause time between
+     * poll attempts. 
+     * Handles the case of a reserve item disappearing between polls, in which case the item
+     * will be reserved and fetched.
+     * 
+     * @param id - an identifier which uniquely identifies an item of type T
+     * @param fetcher - a function returning a promise of an item of type T
+     */
+    private reserveWaiter(id: string, fetcher: Fetcher<T>): Promise<CacheItem<T>> {
+        return new Promise<CacheItem<T>>((resolve, reject) => {
             const started = new Date().getTime();
             const waiting = true;
 
@@ -102,8 +110,10 @@ export class Cache<T> {
                 if (!waiting) {
                     return;
                 }
-                window.setTimeout(() => {
-                    if (this.cache.has(item.id)) {
+                setTimeout(() => {
+                    const item = this.cache.get(id);
+                    // Handle case of an item disappearing from the cache.
+                    if (!item) {
                         // If on a wait-loop cycle we discover that the
                         // cache item has been deleted, we volunteer
                         // to attempt to fetch it ourselves.
@@ -111,37 +121,39 @@ export class Cache<T> {
                         // of the first request to any dynamic service,
                         // which may cancel the initial service wizard
                         // call rather than the service call.
-                        return this.reserveAndFetch({
-                            id: item.id,
-                            fetcher: item.fetcher
-                        })
+
+                        this.reserveAndFetch(id, fetcher)
                             .then(() => {
                                 // resolve(result);
                                 // we resolve with the cache item just
                                 // as if we had waited for it.
-                                resolve(this.cache.get(item.id));
+                                resolve(this.cache.get(id));
                             })
                             .catch((err: Error) => {
                                 reject(err);
                             });
-                    }
-                    if (!item.reserved) {
-                        resolve(item);
-                    } else {
+                    } else if (item.reserved) {
+                        // Not ready yet, so either ...
                         const elapsed = new Date().getTime() - started;
-                        if (elapsed > this.waiterTimeout) {
-                            this.cache.delete(item.id);
+                        if (elapsed < this.waiterTimeout) {
+                            // Our time spent waiting is still within the timeout window, so keep going.
+                            waiter();
+                            return;
+                        } else {
+                            // Otherwise we have waited too long, and we just give up.
+                            // this.cache.delete(item.id);
                             reject(
                                 new Error(
                                     'Timed-out waiting for cache item to become available; timeout ' +
-                                        this.waiterTimeout +
-                                        ', waited ' +
-                                        elapsed
+                                    this.waiterTimeout +
+                                    ', waited ' +
+                                    elapsed
                                 )
                             );
-                        } else {
-                            waiter();
+                            return;
                         }
+                    } else {
+                        resolve(item);
                     }
                 }, this.waiterFrequency);
             };
@@ -149,11 +161,20 @@ export class Cache<T> {
         });
     }
 
-    reserveAndFetch({ id, fetcher }: { id: string; fetcher: () => Bluebird<T> }) {
+    /**
+     * Reserve an item of type T, uniquely identified by id, and the proceed to fetch it 
+     * and add it to the cache (under that id).
+     * 
+     * @param id - 
+     * @param fetcher - a function which returns promise of a thing T
+     */
+    private reserveAndFetch(id: string, fetcher: Fetcher<T>) {
         // now, reserve it.
         this.reserveItem(id, fetcher);
 
         // and then fetch it.
+        // We keep a reference to the fetch so that we can determine if
+        // the fetch was cancelled.
         const fetchPromise = fetcher()
             .then((result: any) => {
                 this.setItem(id, result, fetcher);
@@ -163,31 +184,51 @@ export class Cache<T> {
                 // If the fetch was cancelled, we need to remove
                 // the reserved item. This should signal any queued waiters
                 // to spawn their own fetch.
-                if (fetchPromise.isCancelled()) {
-                    this.cache.get(id);
-                }
+                // TODO: restore this!
+                // if (fetchPromise.isCancelled()) {
+                //     this.cache.delete(id);
+                // }
             });
         return fetchPromise;
     }
 
-    getItemWithWait({ id, fetcher }: { id: string; fetcher: () => Bluebird<T> }) {
+    /**
+     * Given an id which uniquely identifies an item of type T,
+     * and a fetcher with which to retrieve such an item,
+     * return a promise for such an item.
+     * 
+     * @param id - unique identifier for an object of type T
+     * @param fetcher - a function returning a promise of an item of type T
+     */
+    getItemWithWait({ id, fetcher }: { id: string; fetcher: Fetcher<T> }) {
         const cached = this.cache.get(id);
         if (cached) {
             if (this.isExpired(cached)) {
                 this.cache.delete(id);
-            } else if (this.isReserved(cached)) {
-                return this.reserveWaiter(cached).then((cached) => {
+            } else if (cached.reserved) {
+                // Wait until a reserved item is fulfilled (or not!)
+                return this.reserveWaiter(id, fetcher).then((cached) => {
                     return cached.value;
                 });
             } else {
-                return Bluebird.resolve(cached.value);
+                // Success!
+                return Promise.resolve(cached.value);
             }
         }
 
-        return this.reserveAndFetch({ id, fetcher });
+        // If not cached, then we try to fetch it.
+        return this.reserveAndFetch(id, fetcher);
     }
 
-    reserveItem(id: string, fetcher: () => Bluebird<T>) {
+    /**
+     * Adds an item to the cache in a "reserved" state. 
+     * This state implies that item is or is going to soon be 
+     * fetched.
+     * 
+     * @param id - some opaque string identifier uniquely associated with the thing T
+     * @param fetcher 
+     */
+    private reserveItem(id: string, fetcher: () => Promise<T>) {
         this.cache.set(id, {
             id: id,
             createdAt: new Date().getTime(),
@@ -197,7 +238,7 @@ export class Cache<T> {
         });
     }
 
-    setItem(id: string, value: T, fetcher: () => Bluebird<T>) {
+    private setItem(id: string, value: T, fetcher: () => Promise<T>) {
         if (this.cache.has(id)) {
             const item = this.cache.get(id);
             if (item && item.reserved) {
@@ -252,6 +293,14 @@ export interface DynamicServiceClientParams {
     rpcContext?: any;
 }
 
+const DEFAULT_TIMEOUT = 10000;
+
+export interface ServiceCallResult<T> {
+    version: '1.1',
+    id: string,
+    result: T
+}
+
 export class DynamicServiceClient {
     token: string;
     timeout: number;
@@ -264,7 +313,7 @@ export class DynamicServiceClient {
     constructor({ token, url, version, timeout, rpcContext }: DynamicServiceClientParams) {
         // Establish an auth object which has properties token and user_id.
         this.token = token;
-        this.timeout = timeout || 10000;
+        this.timeout = timeout || DEFAULT_TIMEOUT;
         this.rpcContext = rpcContext || null;
 
         if (!url) {
@@ -278,7 +327,7 @@ export class DynamicServiceClient {
         }
     }
 
-    options() {
+    private options() {
         return {
             timeout: this.timeout,
             authorization: this.token,
@@ -286,11 +335,11 @@ export class DynamicServiceClient {
         };
     }
 
-    getModule() {
+    private getModule() {
         return (this.constructor as typeof DynamicServiceClient).module;
     }
 
-    moduleId() {
+    private moduleId() {
         let moduleId;
         if (!this.version) {
             moduleId = this.getModule() + ':auto';
@@ -300,7 +349,7 @@ export class DynamicServiceClient {
         return moduleId;
     }
 
-    getCached(fetcher: () => Bluebird<any>) {
+    private getCached(fetcher: () => Promise<GetServiceStatusResult>) {
         return moduleCache.getItemWithWait({
             id: this.moduleId(),
             fetcher: fetcher
@@ -311,15 +360,18 @@ export class DynamicServiceClient {
     //     moduleCache.setItem(this.moduleId(), value);
     // }
 
-    lookupModule() {
+    // TODO: Promise<any> -> Promise<ServiceStatusResult>
+    private async lookupModule(): Promise<GetServiceStatusResult> {
         return this.getCached(
-            (): Bluebird<any> => {
+            (): Promise<GetServiceStatusResult> => {
                 const client = new ServiceWizardClient({
                     url: this.url,
                     token: this.token,
                     timeout: this.timeout
                 });
-                return Bluebird.resolve(
+                // NB wrapped in promise.resolve because the promise we have 
+                // here is bluebird, which supports cancellation, which we need.
+                return Promise.resolve(
                     client.getServiceStatus({
                         module_name: this.getModule(),
                         version: this.version
@@ -329,19 +381,15 @@ export class DynamicServiceClient {
         );
     }
 
-    callFunc<T>(funcName: string, params: any) {
-        return this.lookupModule()
-            .then((serviceStatus) => {
-                const client = new AuthorizedGenericClient({
-                    module: serviceStatus.module_name,
-                    url: serviceStatus.url,
-                    token: this.token
-                });
-                return Bluebird.resolve(client.callFunc<T>(funcName, params));
-            })
-            .catch((err) => {
-                console.error('ERROR: ' + err.name + ' = ' + err.message, err);
-                throw err;
-            });
+    protected async callFunc<P, T>(funcName: string, params: P): Promise<T> {
+        const moduleInfo = await this.lookupModule();
+        const client = new AuthorizedGenericClient({
+            module: moduleInfo.module_name,
+            url: moduleInfo.url,
+            token: this.token
+        });
+
+        return await client.callFunc<P, T>(funcName, params);
     }
 }
+

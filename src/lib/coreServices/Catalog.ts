@@ -1,17 +1,19 @@
 import { GenericClient } from '../comm/GenericClient';
 
-interface IsAdminParam {
-    username?: string;
-}
+// interface IsAdminParam {
+//     username?: string;
+// }
+
+type IsAdminParam = null;
 
 type IsAdminResult = boolean;
 
-interface ExecAggrTableParam {
+interface GetExecAggrTableParam {
     begin?: number;
     end?: number;
 }
 
-interface ExecAggrTableResult {
+interface GetExecAggrTableResult {
     app: string;
     func: string;
     func_mod: string;
@@ -19,12 +21,12 @@ interface ExecAggrTableResult {
     user: string;
 }
 
-interface ExecAggrStatsParam {
+interface GetExecAggrStatsParam {
     full_app_ids?: Array<string>;
     per_week?: boolean;
 }
 
-interface ExecAggrStatsResult {
+interface GetExecAggrStatsResult {
     full_app_id: string;
     time_range: string;
     type: string;
@@ -39,17 +41,22 @@ export default class CatalogClient extends GenericClient {
     static module: string = 'Catalog';
 
     async isAdmin(): Promise<IsAdminResult> {
-        const [result] = await this.callFunc<[IsAdminResult]>('is_admin', [null]);
+        try {
+            const [result] = await this.callFunc<[IsAdminParam], [IsAdminResult]>('is_admin', [null]);
+            return result;
+        } catch (ex) {
+            console.error('ERROR', ex);
+            throw ex;
+        }
+    }
+
+    async getExecAggrTable(param: GetExecAggrTableParam): Promise<Array<GetExecAggrTableResult>> {
+        const [result] = await this.callFunc<[GetExecAggrTableParam], [Array<GetExecAggrTableResult>]>('get_exec_aggr_table', [param]);
         return result;
     }
 
-    async getExecAggrTable(param: ExecAggrTableParam): Promise<Array<ExecAggrTableResult>> {
-        const [result] = await this.callFunc<[Array<ExecAggrTableResult>]>('get_exec_aggr_table', [param]);
-        return result;
-    }
-
-    async getExecAggrStats(param: ExecAggrStatsParam): Promise<Array<ExecAggrStatsResult>> {
-        const [result] = await this.callFunc<[Array<ExecAggrStatsResult>]>('get_exec_aggr_stats', [param]);
+    async getExecAggrStats(param: GetExecAggrStatsParam): Promise<Array<GetExecAggrStatsResult>> {
+        const [result] = await this.callFunc<[GetExecAggrStatsParam], [Array<GetExecAggrStatsResult>]>('get_exec_aggr_stats', [param]);
         return result;
     }
 }

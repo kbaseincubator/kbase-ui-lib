@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export interface RootInfo {
     version: string;
     servertime: number;
@@ -100,72 +102,34 @@ export default class AuthClient {
         return [this.url].concat(path).join('/');
     }
 
-    root(): Promise<RootInfo> {
-        return fetch(this.makePath([endpoints.root]), {
+    async root(): Promise<RootInfo> {
+        const response = await axios.get(this.makePath([endpoints.root]), {
             headers: {
                 Accept: 'application/json'
-            },
-            mode: 'cors'
+            }
         })
-            .then((response) => {
-                return response.json();
-            })
-            .then((result) => {
-                return result as RootInfo;
-            });
+
+        return response.data as RootInfo
     }
 
-    getTokenInfo(token: string): Promise<TokenInfo> {
-        return fetch(this.makePath([endpoints.tokenInfo]), {
+    async getTokenInfo(token: string): Promise<TokenInfo> {
+        const { data } = await axios.get(this.makePath([endpoints.tokenInfo]), {
             headers: {
                 Accept: 'application/json',
                 Authorization: token
-            },
-            mode: 'cors'
+            }
         })
-            .then((response) => {
-                if (response.status !== 200) {
-                    throw new Error(response.statusText);
-                }
-                return response.json();
-            })
-            .then((result) => {
-                return result as TokenInfo;
-            });
+
+        return data as TokenInfo
     }
 
-    getMe(token: string): Promise<Account> {
-        return fetch(this.makePath([endpoints.apiMe]), {
+    async getMe(token: string): Promise<Account> {
+        const { data } = await axios.get(this.makePath([endpoints.apiMe]), {
             headers: {
                 Accept: 'application/json',
                 Authorization: token
-            },
-            mode: 'cors'
-        })
-            .then((response) => {
-                if (response.status !== 200) {
-                    throw new Error(response.statusText);
-                }
-                return response.json();
-            })
-            .then((result) => {
-                return result as Account;
-            });
+            }
+        });
+        return data as Account;
     }
-
-    // getInfo() : Promise<GroupsServiceInfo> {
-    //     return fetch(this.url + '/', {
-    //         headers: {
-    //             Authorization: this.token,
-    //             Accept: 'application/json'
-    //         },
-    //         mode: 'cors'
-    //     })
-    //         .then((response) => {
-    //             return response.json();
-    //         })
-    //         .then((result) => {
-    //             return result as GroupsServiceInfo;
-    //         });
-    // }
 }

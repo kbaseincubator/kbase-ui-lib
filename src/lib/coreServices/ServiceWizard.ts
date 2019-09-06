@@ -73,17 +73,17 @@ function isGetServiceStatusResult(x: any): x is GetServiceStatusResult {
 /**
  * Params structure for client constructor
  */
-export interface ServiceWizardClientParams extends AuthorizedServiceClientConstructorParams {}
+export interface ServiceWizardClientParams extends AuthorizedServiceClientConstructorParams { }
 
 /**
  * Params (input) structure for the get_service_status call
  */
-export interface GetServiceStatusParams extends Service {}
+export interface GetServiceStatusParams extends Service { }
 
 /**
  * Result (output) structure for the get_service_status call.
  */
-export interface GetServiceStatusResult extends ServiceStatus {}
+export interface GetServiceStatusResult extends ServiceStatus { }
 
 /**
  * The service wizard client.
@@ -101,15 +101,15 @@ export class ServiceWizardClient extends AuthorizedServiceClient<ServiceWizardCl
         if (result.result && result.result.length > 0) {
             const theResult = result.result[0];
             if (!theResult) {
-                throw new Error('Crazy at it seems, no result');
+                throw new Error('Crazy as it seems, result is falsy');
             }
             if (isGetServiceStatusResult(theResult)) {
                 return theResult;
             } else {
-                throw new Error('Sorry, not the expected type "GetServiceStatusResult"');
+                throw new Error('Sorry, result does not conform to "GetServiceStatusResult"');
             }
         } else {
-            throw new Error('Crazy at it seems, no result');
+            throw new Error('Crazy as it seems, no result');
         }
     }
 }
