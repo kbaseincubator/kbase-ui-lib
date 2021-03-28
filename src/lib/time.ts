@@ -247,10 +247,10 @@ export function niceDuration(value: number, options: NiceDurationOptions = {}) {
     }
 }
 
-export function niceElapsed(value: number, options: NiceDurationOptions = {}) {
-    const minimized = [];
+export function niceElapsed(elapsedTime: number, options: NiceDurationOptions = {}): [string, Array<{label: string, value: number}>] {
+
     const format = options.format || 'compact';
-    let temp = Math.abs(value);
+    let temp = Math.abs(elapsedTime);
     const parts = timeUnits
         .map(function (unit) {
             // Get the remainder of the current value
@@ -277,6 +277,7 @@ export function niceElapsed(value: number, options: NiceDurationOptions = {}) {
     // We also can limit the resolution with options.resolution, which
     // limits the number of time units to display.
     let keep = false;
+    const minimized = [];
     for (let i = 0; i < parts.length; i += 1) {
         if (!keep) {
             if (parts[i].value > 0) {
@@ -290,7 +291,6 @@ export function niceElapsed(value: number, options: NiceDurationOptions = {}) {
         }
         minimized.push(parts[i]);
     }
-
 
     if (minimized.length === 0) {
         // This means that there is are no time measurements > 1 second.

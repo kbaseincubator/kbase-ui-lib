@@ -1,0 +1,243 @@
+# KBase Sample Format
+---
+id: kbase
+name: KBase
+title: KBase Samples
+description: A global format for KBase custom samples
+source:
+  name: KBase
+  title: KBase Sample Format
+  url: https://www.kbase.us
+mappings:
+  record:
+    name: name
+  sample:
+    id: id
+    parent_id: parent_id
+layouts:
+  grouped:
+    - name: description
+      label: Description
+      description: Fields which describe the overall sample event
+      fields:
+        - id
+        - parent_id
+        - igsn
+        - parent_igsn
+        - name
+        - purpose
+        - material
+        - ENIGMA:material
+        - SESAR:material
+        - field_name
+        - field_name_informal_classification
+        - classification
+        - field_program_cruise
+        - sample_name
+        - related_identifiers
+        - relation_type
+        - release_date
+        - comment
+        - other_names
+        - related_url
+        - related_url_type
+        - related_url_description
+        - sub_object_type
+        - sample_id
+        - description
+        - condition
+        - experiment_name
+    - name: collection
+      label: Collection
+      description: Fields which describe the collection
+      fields:
+        - collection_date
+        - collection_date_end
+        - collection_time
+        - collection_time_end
+        - collection_date_precision
+        - collector_chief_scientist
+        - collector_chief_scientist_address
+        - collection_method
+        - collection_method_description
+        - collection_time
+        - date
+        - time_zone
+        - timezone
+    - name: geolocation
+      label: Geolocation
+      description: Fields which describe the sample collection location
+      fields:
+        - coordinate_precision?
+        - latitude
+        - latitude_end
+        - longitude
+        - longitude_end
+        - vertical_datum
+        - northing
+        - easting
+        - navigation_type
+        - locality_description
+        - location_description
+        - name_of_physiographic_feature
+        - primary_physiographic_feature
+        - elevation_start
+        - elevation_end
+        - elevation_unit
+        - city_township
+        - county
+        - locality
+        - state_province
+        - country
+        - continent
+        - region
+        - zone
+        - geological_zone
+        - area_name
+    - name: sample
+      label: Sample
+      description: Sample measurements and observations
+      fields:
+        - sample_description
+        - depth_in_core_max
+        - depth_in_core_min
+        - depth
+        - depth_scale
+        - launch_id
+        - launch_platform_name
+        - launch_type
+        - platform_type
+        - platform_description
+        - platform_name
+        - size
+        - size_unit
+        - age_min
+        - age_max
+        - age_unit
+        - geological_age
+        - geological_unit
+    - name: environment
+      label: Environment
+      description: Environment Description and Measurements
+      fields:
+        - temperature
+        - environmental_package
+        - env_package
+    - name: well
+      label: Well
+      description: Well Characteristics
+      fields:
+        - well_name
+        - type_of_well
+        - upper_seal_end_depth
+        - upper_seal_start_depth
+        - upper_seal_type
+        - well
+        - well_casing_depth
+        - well_casing_id
+        - well_casing_od
+        - well_casing_type
+        - well_status
+    - name: curation
+      label: Curation
+      description: Fields which describe the curation of the sample
+      fields:
+        - current_archive
+        - current_archive_contact
+        - original_archive
+        - original_archive_contact
+    - name: uncategorized
+      label: Uncategorized Fields
+      description:
+        A catchall for fields which have not been assigned to a group;
+        ideally no samples would be in this group!
+      fields:
+        - aodc
+        - aquifer
+        - average_water_level
+        - biomass_carbon
+        - biome
+        - boncat_activity
+        - boring
+        - boring_diameter
+        - boring_refusal
+        - conductivity
+        - dapi_cell_count
+        - dna_picogreen_total
+        - drive_casing_end_depth
+        - drive_casing_id
+        - drive_casing_od
+        - drive_casing_start_depth
+        - drive_casing_type
+        - elevation
+        - feature
+        - filter
+        - fraction
+        - fractures_cavities_waterbreaks
+        - functional_area
+        - gold:biosample_id
+        - gold:ecosystem_subtype
+        - gold:ecosystem_type
+        - gold:habitat
+        - gold:study_id
+        - ground_elevation
+        - installation_method
+        - leucine_activity_ngc_day_cell
+        - lower_seal_end_depth
+        - lower_seal_start_depth
+        - lower_seal_type
+        - maturation_time
+        - max_water_level
+        - method
+        - min_water_level
+        - moisture
+        - ncbi:taxonomy_name
+        - nmdc:community
+        - nmdc:description_long
+        - nmdc:doi
+        - nmdc:ecosystem
+        - nmdc:ecosystem_category
+        - nmdc:env_local_scale_term
+        - nmdc:mod_date
+        - nmdc:principal_investigator
+        - nmdc:specific_ecosystem
+        - nmdc:type
+        - open
+        - open_casing_depth
+        - open_casing_id
+        - open_casing_od
+        - open_casing_type
+        - open_hole_depth
+        - open_hole_diameter
+        - open_interval_diameter
+        - open_interval_end_depth
+        - open_interval_start_depth
+        - organic_carbon
+        - origination_or_plug_abandon
+        - other_name
+        - packing_depth_end
+        - packing_depth_start
+        - packing_type
+        - ph
+        - pore_water_extraction
+        - recovery_factor
+        - redox_potential_?
+        - replicate
+        - rock_formation
+        - sampleid
+        - screen_bottom_elevation
+        - screen_end_depth
+        - screen_start_depth
+        - screen_top_elevation
+        - screen_type
+        - screened
+        - screened_interval
+        - sub-object_type
+        - time
+        - top_of_casing_elevation
+        - top_of_casing_stickup
+        - top_of_fresh_bedrock
+        - top_of_weathered_bedrock
+        - total_carbon
+        - total_nitrogen
+        - treatment

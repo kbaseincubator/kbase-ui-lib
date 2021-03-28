@@ -1,5 +1,5 @@
 import * as Cookies from 'es-cookie';
-import AuthClient from './coreServices/auth';
+import AuthClient from './comm/coreServices/Auth';
 
 export type Role = string;
 

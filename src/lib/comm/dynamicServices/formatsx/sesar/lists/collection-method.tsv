@@ -1,0 +1,33 @@
+Blasting
+Camera SledCamera tow
+Coring
+Coring>BoxCorer
+Coring>CameraMounted
+Coring>DrillCorer
+Coring>FreeFallCorer
+Coring>GravityCorer
+Coring>GravityCorer>Giant
+Coring>GravityCorer>Pilot
+Coring>HandHeldCorer
+Coring>KastenlotCorer
+Coring>MultiCorer
+Coring>PistonCorer
+Coring>PistonCorer>Giant
+Coring>RockCorer
+Coring>SideSaddleCorer
+Coring>SubmersibleMountedCorer
+Coring>TriggerWeightCorer
+Coring>VibratingCorer
+Dredging
+Dredging>Chain Bag
+Dredging>ChainBagDredge
+Experimental Apparatus
+Grab
+Grab>HOV
+Grab>ROV
+Manual
+Manual>Hammer
+Probe
+Sediment trap
+Suspended sediment
+Unknown

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="af186efa-fca4-4ebd-b5c3-4d33f3768fee" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/lib/PubSub.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/PubSub.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/Cache.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/HTTPClient.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/HTTPUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/JSONRPC11/DynamicServiceClient.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/JSONRPC11/GenericClient.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/JSONRPC11/JSONRPC11.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/JSONRPC11/ServiceClient.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/JSONRPC11/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/JSONRPC20/DynamicServiceClient.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/JSONRPC20/GenericClient.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/coreServices/Catalog.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/coreServices/ServiceWizard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/coreServices/UserProfileClient.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/coreServices/Workspace.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/Sample.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/enigma/enigma.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/enigma/enigma.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/kbase/kbase.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/kbase/kbase.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/classification-biology.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/classification-mineral.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/classification-rock.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/collection-method.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/country.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/distance.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/duration.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/launch-type.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/material.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/navigation-type.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/navigation-type.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/object-type.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/physiographic-feature.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/platform-type.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/lists/sub-object-type.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/sesar.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/comm/dynamicServices/formatsx/sesar/sesar.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/json.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/json.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/simpleObject.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/windowChannel.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/Auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/Auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/comm/DynamicServiceClient.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/comm/GenericClient.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/comm/ServiceClient.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/coreServices/Catalog.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/coreServices/NarrativeJobService.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/coreServices/ServiceWizard.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/coreServices/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/comm/coreServices/Auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/time.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/time.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/time.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/time.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/windowChannel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/windowChannel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1pDS83ACP85xV2UJXmtwofSTS6x" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/lib/comm/coreServices" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/lib/comm/coreServices" />
+      <recent name="$PROJECT_DIR$/src/lib" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/_attic" />
+      <recent name="$PROJECT_DIR$/src/lib/comm/JSONRPC11" />
+      <recent name="$PROJECT_DIR$/src/lib/commx" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="af186efa-fca4-4ebd-b5c3-4d33f3768fee" name="Default Changelist" comment="" />
+      <created>1614716004633</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1614716004633</updated>
+      <workItem from="1614716006505" duration="34000" />
+      <workItem from="1616172572622" duration="1263000" />
+      <workItem from="1616173850914" duration="39953000" />
+      <workItem from="1616444818262" duration="71000" />
+      <workItem from="1616512912592" duration="567000" />
+      <workItem from="1616590709986" duration="9000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+</project>

@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export interface RootInfo {
     version: string;
     servertime: number;
@@ -103,33 +101,38 @@ export default class AuthClient {
     }
 
     async root(): Promise<RootInfo> {
-        const response = await axios.get(this.makePath([endpoints.root]), {
+        const response = await fetch(this.makePath([endpoints.root]), {
+            method: 'GET',
             headers: {
                 Accept: 'application/json'
             }
-        })
-
-        return response.data as RootInfo
+        });
+        const result = await response.json();
+        return result.data as RootInfo
     }
 
     async getTokenInfo(token: string): Promise<TokenInfo> {
-        const { data } = await axios.get(this.makePath([endpoints.tokenInfo]), {
+        const response = await fetch(this.makePath([endpoints.tokenInfo]), {
+            method: 'GET',
             headers: {
                 Accept: 'application/json',
                 Authorization: token
             }
         })
 
-        return data as TokenInfo
+        const result = await response.json();
+        return result.data as TokenInfo
     }
 
     async getMe(token: string): Promise<Account> {
-        const { data } = await axios.get(this.makePath([endpoints.apiMe]), {
+        const response = await fetch(this.makePath([endpoints.apiMe]), {
+            method: 'GET',
             headers: {
                 Accept: 'application/json',
                 Authorization: token
             }
         });
-        return data as Account;
+        const result = await response.json();
+        return result.data as Account;
     }
 }

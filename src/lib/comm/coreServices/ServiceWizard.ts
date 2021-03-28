@@ -1,4 +1,5 @@
-import { AuthorizedServiceClient, AuthorizedServiceClientConstructorParams } from '../comm/ServiceClient';
+import { JSONObject } from '../../json';
+import { ServiceClient } from '../JSONRPC11/ServiceClient';
 
 // types from module
 
@@ -73,43 +74,50 @@ function isGetServiceStatusResult(x: any): x is GetServiceStatusResult {
 /**
  * Params structure for client constructor
  */
-export interface ServiceWizardClientParams extends AuthorizedServiceClientConstructorParams { }
+// export interface ServiceWizardClientParams extends JSONRPCClientParams { }
 
 /**
  * Params (input) structure for the get_service_status call
  */
-export interface GetServiceStatusParams extends Service { }
+export interface GetServiceStatusParams extends JSONObject {
+    module_name: string;
+    version: string | null;
+}
 
 /**
  * Result (output) structure for the get_service_status call.
  */
-export interface GetServiceStatusResult extends ServiceStatus { }
+export interface GetServiceStatusResult extends JSONObject {
+    module_name: string;
+    version: string;
+    git_commit_hash: string;
+    release_tags: Array<string>;
+    hash: string;
+    url: string;
+    up: number; // aka boolean
+    status: string;
+    health: string;
+}
 
 /**
  * The service wizard client.
  */
-export class ServiceWizardClient extends AuthorizedServiceClient<ServiceWizardClientParams> {
-    static module: string = 'ServiceWizard';
+export class ServiceWizardClient extends ServiceClient {
+    module: string = 'ServiceWizard';
 
     // constructor(params: ServiceWizardClientParams) {
     //     super(params);
     // }
 
-    async getServiceStatus(params: GetServiceStatusParams): Promise<GetServiceStatusResult> {
-        const result = await this.callFunc('get_service_status', params);
-
-        if (result.result && result.result.length > 0) {
-            const theResult = result.result[0];
-            if (!theResult) {
-                throw new Error('Crazy as it seems, result is falsy');
-            }
-            if (isGetServiceStatusResult(theResult)) {
-                return theResult;
-            } else {
-                throw new Error('Sorry, result does not conform to "GetServiceStatusResult"');
-            }
+    async get_service_status(params: GetServiceStatusParams): Promise<GetServiceStatusResult> {
+        const [result] = await this.callFunc<Array<GetServiceStatusParams>, Array<GetServiceStatusResult>>('get_service_status', [params]);
+        if (!result) {
+            throw new Error('Crazy as it seems, result is falsy');
+        }
+        if (isGetServiceStatusResult(result)) {
+            return result;
         } else {
-            throw new Error('Crazy as it seems, no result');
+            throw new Error('Sorry, result does not conform to "GetServiceStatusResult"');
         }
     }
 }
