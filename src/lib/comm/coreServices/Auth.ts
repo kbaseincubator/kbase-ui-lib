@@ -107,8 +107,7 @@ export default class AuthClient {
                 Accept: 'application/json'
             }
         });
-        const result = await response.json();
-        return result.data as RootInfo
+        return (await response.json()) as RootInfo;
     }
 
     async getTokenInfo(token: string): Promise<TokenInfo> {
@@ -120,8 +119,7 @@ export default class AuthClient {
             }
         })
 
-        const result = await response.json();
-        return result.data as TokenInfo
+        return (await response.json()) as TokenInfo;
     }
 
     async getMe(token: string): Promise<Account> {
@@ -132,7 +130,6 @@ export default class AuthClient {
                 Authorization: token
             }
         });
-        const result = await response.json();
-        return result.data as Account;
+        return (await response.json()) as Account;
     }
 }
