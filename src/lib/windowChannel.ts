@@ -1,6 +1,5 @@
-import {v4 as uuidv4} from 'uuid';
-import {JSONObject} from "./json";
-import {isSimpleObject} from "./simpleObject";
+import { v4 as uuidv4 } from 'uuid';
+import { isSimpleObject } from "./simpleObject";
 
 interface ListenerParams {
     name: string;
@@ -200,7 +199,7 @@ interface Stats {
 export class WindowChannel {
     private readonly window: Window;
     private readonly host: string;
-    private readonly  id: string;
+    private readonly id: string;
     private partnerId: string;
     private awaitingResponses: Map<string, ReplyHandler>;
     private waitingListeners: Map<string, Array<Listener>>;
@@ -210,7 +209,7 @@ export class WindowChannel {
     private running: boolean;
     private readonly stats: Stats;
 
-    constructor({window, host, id, to}: WindowChannelParams) {
+    constructor({ window, host, id, to }: WindowChannelParams) {
         // The given window upon which we will listen for messages.
         this.window = window;
 
@@ -263,21 +262,26 @@ export class WindowChannel {
         // In all cases we issue a warning, and return.
 
         if (!isSimpleObject(message)) {
+            // console.warn('[receiveMessage] ignored message because not simple object', message);
             this.stats.ignored += 1;
             return;
         }
 
         // TODO: could do more here.
         if (!message.envelope) {
+            // console.warn('[receiveMessage] ignored message because no envelope', message);
             this.stats.ignored += 1;
             return;
         }
 
         // Here we ignore messages intended for another windowChannel object.
         if (message.envelope.to !== this.id) {
+            // console.warn('[receiveMessage] ignored message because "to" is not this id', this.id, message);
             this.stats.ignored += 1;
             return;
         }
+
+        // console.warn('[receiveMessage] 2', message);
 
         this.stats.received += 1;
 
@@ -298,7 +302,7 @@ export class WindowChannel {
             const response = this.awaitingResponses.get(message.envelope.inReplyTo);
             this.awaitingResponses.delete(message.envelope.inReplyTo);
             if (response) {
-                 response.handler(message.envelope.status, message.payload);
+                response.handler(message.envelope.status, message.payload);
             }
             return;
         }
@@ -329,12 +333,12 @@ export class WindowChannel {
                     try {
                         return listener.callback(message.payload);
                     } catch (ex) {
-                         if (listener.onError) {
+                        if (listener.onError) {
                             listener.onError(ex);
                         }
                     }
                     break;
-                case  'request':
+                case 'request':
                     const [ok, err] = (() => {
                         try {
                             return [listener.callback(message.payload), null];
