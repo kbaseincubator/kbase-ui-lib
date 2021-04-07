@@ -3,24 +3,53 @@ import AuthClient from './comm/coreServices/Auth';
 
 export type Role = string;
 
-export interface UserAuthorization {
+export interface UserAuthentication {
     token: string;
     username: string;
     realname: string;
     roles: Array<Role>;
 }
 
-export enum AuthState {
-    NONE = 0,
-    AUTHENTICATED,
-    UNAUTHENTICATED,
-    ERROR
+export enum AuthenticationStatus {
+    NONE = 'NONE',
+    CHECKING = 'CHECKING',
+    AUTHENTICATED = 'AUTHENTICATED',
+    UNAUTHENTICATED = 'UNAUTHENTICATED',
+    ERROR = 'ERROR'
 }
 
-export interface AuthInfo {
-    status: AuthState;
-    userAuthorization: UserAuthorization | null;
+interface AuthenticationBase {
+    status: AuthenticationStatus;
 }
+
+export interface AuthenticationNone extends AuthenticationBase {
+    status: AuthenticationStatus.NONE;
+}
+
+export interface AuthenticationChecking extends AuthenticationBase {
+    status: AuthenticationStatus.CHECKING
+}
+
+export interface AuthenticationAuthenticated extends AuthenticationBase {
+    status: AuthenticationStatus.AUTHENTICATED,
+    userAuthentication: UserAuthentication
+}
+
+export interface AuthenticationUnauthenticated extends AuthenticationBase {
+    status: AuthenticationStatus.UNAUTHENTICATED
+}
+
+export interface AuthenticationError extends AuthenticationBase {
+    status: AuthenticationStatus.ERROR,
+    message: string
+}
+
+export type Authentication =
+    AuthenticationNone |
+    AuthenticationChecking |
+    AuthenticationAuthenticated |
+    AuthenticationUnauthenticated |
+    AuthenticationError;
 
 export default class Auth {
     url: string;
@@ -28,36 +57,33 @@ export default class Auth {
         this.url = url;
     }
 
-    async checkAuth(): Promise<AuthInfo> {
+    async checkAuth(): Promise<Authentication> {
         const token = Cookies.get('kbase_session');
         if (!token) {
-            return Promise.resolve({
-                status: AuthState.UNAUTHENTICATED,
-                userAuthorization: null
-            });
+            return {
+                status: AuthenticationStatus.UNAUTHENTICATED
+            };
         }
 
         const auth = new AuthClient({ url: this.url });
 
-        // Oh no, an orphan promise!
-        return Promise.all([auth.getTokenInfo(token), auth.getMe(token)])
-            .then(([tokenInfo, account]) => {
-                const roles = account.roles.map(({ id, desc }) => id);
-                return {
-                    status: AuthState.AUTHENTICATED,
-                    userAuthorization: {
-                        token,
-                        username: account.user,
-                        realname: account.display,
-                        roles
-                    }
-                };
-            })
-            .catch((err) => {
-                return {
-                    status: AuthState.UNAUTHENTICATED,
-                    userAuthorization: null
-                };
-            });
+        try {
+            const account = await auth.getMe(token);
+            const roles = account.roles.map(({ id, desc }) => id);
+            return {
+                status: AuthenticationStatus.AUTHENTICATED,
+                userAuthentication: {
+                    token,
+                    username: account.user,
+                    realname: account.display,
+                    roles
+                }
+            };
+        } catch (err) {
+            return {
+                status: AuthenticationStatus.ERROR,
+                message: err.message
+            };
+        }
     }
 }
