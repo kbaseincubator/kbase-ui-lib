@@ -260,7 +260,6 @@ test('Send a request, handler generates exception', async () => {
         try {
             return await chan2.request('query', payload);
         } catch (ex) {
-            console.log('HMMY HMM', ex);
             throw ex;
         }
     }).rejects.toThrowError('Oops!');
