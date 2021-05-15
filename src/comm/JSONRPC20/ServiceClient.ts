@@ -14,11 +14,11 @@ export abstract class ServiceClient {
     timeout: number;
     token?: string;
     prefix?: boolean;
-    constructor({ url, timeout, token, prefix }: ServiceClientParams) {
+    constructor({ url, timeout, token, prefix = true }: ServiceClientParams) {
         this.url = url;
         this.timeout = timeout;
         this.token = token;
-        this.prefix = prefix || true;
+        this.prefix = prefix;
     }
     async callFunc<ParamType extends JSONArray, ReturnType extends JSONArray>(funcName: string, params: ParamType): Promise<ReturnType> {
         const client = new JSONRPCClient({ url: this.url, timeout: this.timeout, token: this.token });
