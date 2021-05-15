@@ -1,5 +1,3 @@
-import {isSimpleObject} from "./simpleObject";
-
 export type JSONScalarValue = string | number | boolean | null;
 
 export type JSONValue = JSONScalarValue | JSONObject | JSONArray;
@@ -15,23 +13,27 @@ export interface JSONArrayOf<T extends JSONValue> extends Array<T> { };
 export type JSONArray = JSONArrayOf<JSONValue>;
 
 export function isJSONObject(value: any): value is JSONObject {
-     if  (!isJSONValue(value)) {
+    if (typeof value !== 'object') {
         return false;
     }
-    if (isSimpleObject(value)) {
-        return true;
+    if (value === null) {
+        return false;
     }
-    return false;
+    if (value.constructor !== {}.constructor) {
+        return false;
+    }
+    return !Object.keys(value).some((key) => {
+        return !isJSONValue(value[key]);
+    });
 }
 
 export function isJSONArray(value: any): value is JSONArray {
-    if  (!isJSONValue(value)) {
+    if (!Array.isArray(value)) {
         return false;
     }
-    if (Array.isArray(value)) {
-        return true;
-    }
-    return false;
+    return !value.some((subvalue) => {
+        return !isJSONValue(subvalue);
+    });
 }
 
 export function isJSONValue(value: any): value is JSONValue {
@@ -46,15 +48,11 @@ export function isJSONValue(value: any): value is JSONValue {
     if (value === null) {
         return true;
     }
-    if (Array.isArray(value)) {
-        return !value.some((subvalue) => {
-            return !isJSONValue(subvalue);
-        });
+    if (isJSONArray(value)) {
+        return true;
     }
-    if (value.constructor === {}.constructor) {
-        return !Object.keys(value).some((key) => {
-            return !isJSONValue(value[key]);
-        });
+    if (isJSONObject(value)) {
+        return true;
     }
 
     return false;
