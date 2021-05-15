@@ -5,6 +5,7 @@ export interface ServiceClientParams {
     url: string;
     timeout: number;
     token?: string;
+    prefix?: boolean;
 }
 
 export abstract class ServiceClient {
@@ -12,14 +13,22 @@ export abstract class ServiceClient {
     url: string;
     timeout: number;
     token?: string;
-    constructor({ url, timeout, token }: ServiceClientParams) {
+    prefix?: boolean;
+    constructor({ url, timeout, token, prefix }: ServiceClientParams) {
         this.url = url;
         this.timeout = timeout;
         this.token = token;
+        this.prefix = prefix || true;
     }
     async callFunc<ParamType extends JSONArray, ReturnType extends JSONArray>(funcName: string, params: ParamType): Promise<ReturnType> {
         const client = new JSONRPCClient({ url: this.url, timeout: this.timeout, token: this.token });
-        const method = `${this.module}.${funcName}`;
+        const method = (() => {
+            if (this.prefix) {
+                return `${this.module}.${funcName}`;
+            } else {
+                return funcName;
+            }
+        })();
         const result = await client.callMethod(method, params, { timeout: this.timeout });
 
         if (result.length === 0) {
