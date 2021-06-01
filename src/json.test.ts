@@ -1,4 +1,4 @@
-import {isJSONObject, JSONValue, isJSONArray, isJSONValue, JSONObject, objectToJSONObject} from './json';
+import {isJSONObject, isJSONArray, isJSONValue, JSONObject, objectToJSONObject, traverse} from './json';
 
 let spy: any;
 
@@ -85,7 +85,6 @@ test('Is a JSON Value', () => {
 });
 
 test('Is NOT a JSON Value', () => {
-    class SomeClass { };
     const possibleValues: Array<any> = [
         undefined,
         new Date(),
@@ -109,4 +108,18 @@ test('objectToJSONObject', () => {
     const expected: JSONObject = {hi: 'there'};
     const result = objectToJSONObject(input);
     expect(result).toEqual(expected)
+});
+
+test('traversal', () => {
+    const obj: JSONObject = {
+        'meaning': {
+            'of': {
+                'life': 42,
+                'dog': 'bark'
+            }
+        }
+    }
+    expect(traverse(obj, 'meaning.of.life')).toEqual(42);
+    expect(traverse(obj, 'meaning.of.dog')).toEqual('bark');
+    expect(traverse(obj, 'meaning.of.poop', 'stinky')).toEqual('stinky');
 });

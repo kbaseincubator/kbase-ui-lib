@@ -1,5 +1,5 @@
-import { JSONArray } from '../../json';
-import { JSONRPCClient } from './JSONRPC20';
+import { JSONValue } from '../../json';
+import {JSONRPCClient, JSONRPCParams} from './JSONRPC20';
 
 export interface ServiceClientParams {
     url: string;
@@ -14,13 +14,13 @@ export abstract class ServiceClient {
     timeout: number;
     token?: string;
     prefix?: boolean;
-    constructor({ url, timeout, token, prefix = true }: ServiceClientParams) {
+    protected constructor({ url, timeout, token, prefix = true }: ServiceClientParams) {
         this.url = url;
         this.timeout = timeout;
         this.token = token;
         this.prefix = prefix;
     }
-    async callFunc<ParamType extends JSONArray, ReturnType extends JSONArray>(funcName: string, params: ParamType): Promise<ReturnType> {
+    async callFunc(funcName: string, params?: JSONRPCParams): Promise<JSONValue> {
         const client = new JSONRPCClient({ url: this.url, timeout: this.timeout, token: this.token });
         const method = (() => {
             if (this.prefix) {
@@ -29,23 +29,6 @@ export abstract class ServiceClient {
                 return funcName;
             }
         })();
-        const result = await client.callMethod(method, params, { timeout: this.timeout });
-
-        if (result.length === 0) {
-            throw new Error('Too few (none) return values in return array');
-        }
-
-        return (result as unknown) as ReturnType;
-    }
-    async callFuncEmptyResult<ParamType extends JSONArray>(funcName: string, params: ParamType): Promise<void> {
-        const client = new JSONRPCClient({ url: this.url, timeout: this.timeout, token: this.token });
-        const method = `${this.module}.${funcName}`;
-        const result = await client.callMethod(method, params, { timeout: this.timeout });
-
-        if (result.length !== 0) {
-            throw new Error(`Too many (${result.length}) return values in return array`);
-        }
-
-        return;
+        return await client.callMethod(method, params, { timeout: this.timeout });
     }
 }

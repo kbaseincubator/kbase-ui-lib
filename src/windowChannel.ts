@@ -68,49 +68,6 @@ type Envelope =
     RequestEnvelope |
     ReplyEnvelope;
 
-// class Envelope {
-//     from: string;
-//     to: string;
-//     id: string;
-//     created: Date;
-//
-//     constructor({ from, to }: { from: string; to: string }) {
-//         this.from = from;
-//         this.to = to;
-//         this.id = uuidv4();
-//         this.created = new Date();
-//     }
-//
-//     toJSON(): JSONObject {
-//         return {
-//             from: this.from,
-//             to: this.to,
-//             id: this.id,
-//             created: this.created.getTime()
-//         };
-//     }
-// }
-//
-// interface ReplyToEnvelopeConstructorParams {
-//     from: string;
-//     to: string;
-//     inReplyTo: string;
-// }
-//
-// class ReplyEnvelope extends Envelope {
-//     inReplyTo:string;
-//     constructor(params: ReplyToEnvelopeConstructorParams) {
-//         super(params);
-//         this.inReplyTo = params.inReplyTo;
-//     }
-//
-//     toJSON() {
-//         const base = super.toJSON();
-//         base['inReplyTo'] = this.inReplyTo
-//         return base;
-//     }
-// }
-
 class Message {
     name: string;
     payload: any;

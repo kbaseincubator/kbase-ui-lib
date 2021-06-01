@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { JSONArrayOf, JSONValue } from '../../json';
+import { JSONObject, JSONValue, JSONArray} from '../../json';
 
 export interface JSONRPCRequestOptions {
     func: string,
@@ -31,11 +31,13 @@ export interface JSONRPCClientParams {
     token?: string;
 }
 
+export type JSONRPCParams = JSONArray | JSONObject
+
 export interface JSONPayload {
     jsonrpc: string;
     method: string;
     id: string;
-    params: Array<JSONValue>;
+    params?: JSONRPCParams;
 }
 
 export interface JSONRPC20Error {
@@ -55,13 +57,16 @@ export class JSONRPC20Exception extends Error {
     }
 }
 
-export interface JSONRPCResponseResult {
-    result: Array<JSONValue>;
-    error: null;
+export interface JSONRPCResponseBase {
+    jsonrpc: '2.0',
+    id?: string
 }
 
-export interface JSONRPCResponseError {
-    result: null;
+export interface JSONRPCResponseResult extends JSONRPCResponseBase {
+    result: JSONValue;
+}
+
+export interface JSONRPCResponseError extends JSONRPCResponseBase {
     error: JSONRPCError;
 }
 
@@ -77,7 +82,7 @@ export class JSONRPCClient {
         this.token = token;
     }
 
-    protected makePayload(method: string, params: Array<JSONValue>): JSONPayload {
+    protected makePayload(method: string, params?: JSONRPCParams): JSONPayload {
         return {
             jsonrpc: '2.0',
             method,
@@ -86,7 +91,7 @@ export class JSONRPCClient {
         };
     }
 
-    async callMethod(method: string, params: Array<JSONValue>, { timeout }: { timeout?: number; } = {}): Promise<JSONArrayOf<JSONValue>> {
+    async callMethod(method: string, params?: JSONRPCParams, { timeout }: { timeout?: number; } = {}): Promise<JSONValue> {
         const payload = this.makePayload(method, params);
         const headers = new Headers();
         headers.set('content-type', 'application/json');
@@ -102,11 +107,11 @@ export class JSONRPCClient {
             headers
         });
 
-        const result = await (async () => {
+        const rpcResponse = await (async () => {
             const responseText = await response.text();
 
             try {
-                return JSON.parse(responseText) as JSONArrayOf<JSONValue>;
+                return JSON.parse(responseText) as JSONRPCResponse;
             } catch (ex) {
                 console.error('error', ex);
                 throw new JSONRPC20Exception({
@@ -121,17 +126,15 @@ export class JSONRPCClient {
             }
         })();
 
-        if (result.hasOwnProperty('error')) {
-            const errorResult = (result as unknown) as JSONRPCResponseError;
+        if ('error' in rpcResponse) {
             throw new JSONRPC20Exception({
-                name: errorResult.error.name,
-                code: errorResult.error.code,
-                message: errorResult.error.message,
-                error: errorResult.error.error
+                name: rpcResponse.error.name,
+                code: rpcResponse.error.code,
+                message: rpcResponse.error.message,
+                error: rpcResponse.error.error
             });
         }
 
-        const rpcResponse = (result as unknown) as JSONRPCResponseResult;
         return rpcResponse.result;
     }
 }

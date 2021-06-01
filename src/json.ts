@@ -69,3 +69,41 @@ export function objectToJSONObject(obj: {}): JSONObject {
     }
     return x;
 }
+
+export function normalizePropPath(propPath: PropsPath): Array<string> {
+    if (typeof propPath === 'string') {
+        return propPath.split('.');
+    } else if (Array.isArray(propPath)) {
+        return propPath;
+    }
+    throw new TypeError('Invalid type for key: ' + (typeof propPath));
+}
+
+export type PropsPath = string | Array<string>;
+
+export function traverse(obj: JSONObject, path: PropsPath, defaultValue?: JSONValue): JSONValue {
+    const propPath = normalizePropPath(path);
+    let current = obj;
+    const currentPath = [];
+    for (const [index, pathElement] of propPath.entries()) {
+        currentPath.push(pathElement);
+        if (pathElement in current) {
+            const prop = current[pathElement];
+            if (index === propPath.length - 1) {
+                return prop;
+            }
+            if (isJSONObject(prop)) {
+                current = prop;
+            } else {
+                throw new Error(`Cannot navigate into type "${typeof prop}" on path "${currentPath.join('.')}"`)
+            }
+        } else {
+            if (typeof defaultValue === 'undefined') {
+                throw new Error(`Cannot find path ${propPath.join('.')} in object`)
+            } else {
+                return defaultValue;
+            }
+        }
+    }
+    return current;
+}
