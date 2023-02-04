@@ -1,4 +1,4 @@
-import * as Cookies from 'es-cookie';
+import Cookie from 'js-cookie';
 import AuthClient from './comm/coreServices/Auth';
 
 export type Role = string;
@@ -58,7 +58,7 @@ export default class Auth {
     }
 
     async checkAuth(): Promise<Authentication> {
-        const token = Cookies.get('kbase_session');
+        const token = Cookie.get('kbase_session');
         if (!token) {
             return {
                 status: AuthenticationStatus.UNAUTHENTICATED
