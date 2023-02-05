@@ -3,6 +3,5 @@ node_modules
 api-docs
 /_attic
 /lib
-/build
 .idea
 .vscode
