@@ -1,6 +1,6 @@
 import {
     JSONValue
-} from 'json';
+} from '../../json';
 import { JSONLikeObject, toJSON } from '../../jsonLike';
 import { ServiceClient } from '../JSONRPC11/ServiceClient';
 

@@ -1,4 +1,4 @@
-import { JSONArray } from 'json';
+import { JSONArray } from '../../json';
 import Cache from '../Cache';
 import {
     ServiceStatus, ServiceWizardClient

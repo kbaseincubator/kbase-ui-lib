@@ -8,7 +8,6 @@
             "dom",
             "dom.iterable",
         ],
-        "baseUrl": "src",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "noImplicitAny": true,

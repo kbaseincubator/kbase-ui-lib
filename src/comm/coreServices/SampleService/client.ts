@@ -1,4 +1,4 @@
-import { JSONObject, objectToJSONObject } from 'json';
+import { JSONObject, objectToJSONObject } from '../../../json';
 import { JSONLikeObject } from '../../../jsonLike';
 import {
     ServiceClient,

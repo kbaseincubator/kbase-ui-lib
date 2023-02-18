@@ -3,7 +3,7 @@ import {
     JSONObject,
     JSONScalarValue,
     JSONValue
-} from 'json';
+} from './json';
 
 export type JSONLikeValue =
     | JSONScalarValue

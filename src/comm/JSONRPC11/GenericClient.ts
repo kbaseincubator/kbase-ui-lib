@@ -1,4 +1,4 @@
-import { JSONArrayOf, JSONValue } from 'json';
+import { JSONArrayOf, JSONValue } from '../../json';
 import { ServiceClient, ServiceClientParams } from './ServiceClient';
 
 export type GenericClientParams = JSONArrayOf<JSONValue>;

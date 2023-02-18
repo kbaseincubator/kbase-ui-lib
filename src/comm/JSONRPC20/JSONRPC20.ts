@@ -1,6 +1,6 @@
 // import { v4 as uuidv4 } from "https://deno.land/std@0.99.0/uuid/mod.ts";
-import { JSONArray, JSONObject, JSONValue } from 'json';
 import * as uuid from 'uuid';
+import { JSONArray, JSONObject, JSONValue } from '../../json';
 
 export interface JSONRPCRequestOptions {
     func: string;

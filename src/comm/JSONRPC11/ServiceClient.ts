@@ -1,4 +1,4 @@
-import { JSONArray } from 'json';
+import { JSONArray } from '../../json';
 import { JSONRPCClient } from './JSONRPC11';
 
 export interface ServiceClientParams {

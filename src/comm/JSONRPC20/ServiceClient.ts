@@ -1,4 +1,4 @@
-import { JSONValue } from 'json';
+import { JSONValue } from '../../json';
 import { JSONRPCClient, JSONRPCParams } from './JSONRPC20';
 
 export interface ServiceClientParams {

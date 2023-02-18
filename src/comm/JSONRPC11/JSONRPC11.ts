@@ -1,5 +1,5 @@
-import { JSONArrayOf, JSONValue } from 'json';
 import * as uuid from 'uuid';
+import { JSONArrayOf, JSONValue } from '../../json';
 
 export interface JSONRPCRequestOptions {
     func: string;

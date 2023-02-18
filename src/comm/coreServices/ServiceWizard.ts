@@ -1,4 +1,4 @@
-import { JSONObject } from 'json';
+import { JSONObject } from '../../json';
 import { ServiceClient } from '../JSONRPC11/ServiceClient';
 
 // types from module

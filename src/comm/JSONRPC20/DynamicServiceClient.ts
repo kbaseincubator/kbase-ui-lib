@@ -4,7 +4,7 @@ import {
 } from '../coreServices/ServiceWizard';
 import { ServiceClient, ServiceClientParams } from './ServiceClient';
 
-import { JSONValue } from 'json';
+import { JSONValue } from '../../json';
 import { JSONRPCParams } from './JSONRPC20';
 
 const ITEM_LIFETIME = 1800000;

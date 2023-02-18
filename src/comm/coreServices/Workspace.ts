@@ -3,7 +3,7 @@ import {
     JSONObjectOf,
     JSONValue,
     objectToJSONObject
-} from 'json';
+} from '../../json';
 import { JSONLikeArrayOf, JSONLikeObject, toJSON } from '../../jsonLike';
 import { ServiceClient } from '../JSONRPC11/ServiceClient';
 import { EpochTimeMS, Mapping, SDKBoolean } from '../types';

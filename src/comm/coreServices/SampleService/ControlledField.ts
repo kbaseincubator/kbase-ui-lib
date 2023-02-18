@@ -2,8 +2,8 @@
 // TODO: perhaps a widely used TS jsoncschema already has a type definition
 // we can piggyback on??
 
-import { JSONValue } from 'json';
-import { JSONLikeObjectOf, JSONLikeValue } from 'jsonLike';
+import { JSONValue } from '../../../json';
+import { JSONLikeObjectOf, JSONLikeValue } from '../../../jsonLike';
 
 export type JSONSchemaFieldType =
     | 'string'

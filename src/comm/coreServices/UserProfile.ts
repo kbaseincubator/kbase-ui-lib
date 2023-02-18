@@ -1,4 +1,4 @@
-import { JSONArrayOf, JSONObject, JSONObjectOf } from 'json';
+import { JSONArrayOf, JSONObject, JSONObjectOf } from '../../json';
 import { ServiceClient } from '../JSONRPC11/ServiceClient';
 
 export interface User extends JSONObject {

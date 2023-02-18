@@ -3,7 +3,7 @@ import {
     JSONArrayOf,
     JSONObject,
     objectToJSONObject
-} from 'json';
+} from '../../json';
 import { ServiceClient } from '../JSONRPC11/ServiceClient';
 
 // interface IsAdminParam {
