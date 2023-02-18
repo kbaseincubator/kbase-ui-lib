@@ -1,7 +1,9 @@
-import { ServiceWizardClient, ServiceStatus } from '../coreServices/ServiceWizard';
-import { ServiceClient, ServiceClientParams } from './ServiceClient';
+import { JSONArray } from 'json';
 import Cache from '../Cache';
-import { JSONArray } from '../../json';
+import {
+    ServiceStatus, ServiceWizardClient
+} from '../coreServices/ServiceWizard';
+import { ServiceClient, ServiceClientParams } from './ServiceClient';
 
 const ITEM_LIFETIME = 1800000;
 const MONITORING_FREQUENCY = 60000;
@@ -21,7 +23,7 @@ var moduleCache = new Cache<ServiceStatus>({
     itemLifetime: ITEM_LIFETIME,
     monitoringFrequency: MONITORING_FREQUENCY,
     waiterTimeout: WAITER_TIMEOUT,
-    waiterFrequency: WAITER_FREQUENCY
+    waiterFrequency: WAITER_FREQUENCY,
 });
 
 /*
@@ -40,7 +42,6 @@ export interface DynamicServiceClientParams extends ServiceClientParams {
     // module: string;
 }
 
-
 export abstract class DynamicServiceClient extends ServiceClient {
     version: string | null;
 
@@ -52,7 +53,6 @@ export abstract class DynamicServiceClient extends ServiceClient {
     constructor(params: DynamicServiceClientParams) {
         super(params);
         const { version } = params;
-
 
         this.version = version || null;
         if (this.version === 'auto') {
@@ -76,7 +76,7 @@ export abstract class DynamicServiceClient extends ServiceClient {
     private getCached(fetcher: () => Promise<ServiceStatus>) {
         return moduleCache.getItemWithWait({
             id: this.moduleId(),
-            fetcher: fetcher
+            fetcher: fetcher,
         });
     }
 
@@ -91,13 +91,13 @@ export abstract class DynamicServiceClient extends ServiceClient {
                 const client = new ServiceWizardClient({
                     url: this.serviceDiscoveryURL!,
                     token: this.token,
-                    timeout: this.timeout
+                    timeout: this.timeout,
                 });
                 // NB wrapped in promise.resolve because the promise we have
                 // here is bluebird, which supports cancellation, which we need.
                 const status = await client.get_service_status({
                     module_name: this.module,
-                    version: this.version
+                    version: this.version,
                 });
                 return status;
             }
@@ -107,26 +107,19 @@ export abstract class DynamicServiceClient extends ServiceClient {
         return moduleInfo;
     }
 
-    // private async syncModule()
-
-    // async callFunc<P, T>(funcName: string, params: P): Promise<T> {
-    //     const moduleInfo = await this.lookupModule();
-    //     const client = new ServiceClient({
-    //         module: moduleInfo.module_name,
-    //         url: moduleInfo.url,
-    //         token: this.token
-    //     });
-
-    //     return await client.callFunc<P, T>(funcName, params);
-    // }
-
-    async callFunc<ParamType extends JSONArray, ReturnType extends JSONArray>(funcName: string, params: ParamType): Promise<ReturnType> {
+    async callFunc<ParamType extends JSONArray, ReturnType extends JSONArray>(
+        funcName: string,
+        params: ParamType
+    ): Promise<ReturnType> {
         await this.lookupModule();
         return super.callFunc(funcName, params);
     }
-    async callFuncEmptyResult<ParamType extends JSONArray>(funcName: string, params: ParamType): Promise<void> {
+
+    async callFuncEmptyResult<ParamType extends JSONArray>(
+        funcName: string,
+        params: ParamType
+    ): Promise<void> {
         await this.lookupModule();
         return super.callFuncEmptyResult(funcName, params);
     }
 }
-

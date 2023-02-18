@@ -1,4 +1,9 @@
-import { JSONArrayOf, JSONObject, JSONValue, objectToJSONObject } from '../../json';
+// import { JSONArrayOf, JSONObject, JSONValue, objectToJSONObject } from '../../json.ts';
+import {
+    JSONArrayOf,
+    JSONObject,
+    objectToJSONObject
+} from 'json';
 import { ServiceClient } from '../JSONRPC11/ServiceClient';
 
 // interface IsAdminParam {
@@ -42,25 +47,36 @@ interface GetExecAggrStatsResult extends JSONObject {
 //     [k: string]:
 // }
 
-
-
 export default class CatalogClient extends ServiceClient {
     module: string = 'Catalog';
 
     async is_admin(): Promise<JSONArrayOf<IsAdminResult>> {
         try {
-            return await this.callFunc<JSONArrayOf<IsAdminParam>, JSONArrayOf<IsAdminResult>>('is_admin', [null]);
+            return await this.callFunc<
+                JSONArrayOf<IsAdminParam>,
+                JSONArrayOf<IsAdminResult>
+            >('is_admin', [null]);
         } catch (ex) {
             console.error('ERROR', ex);
             throw ex;
         }
     }
 
-    async get_exec_aggr_table(param: GetExecAggrTableParam): Promise<Array<GetExecAggrTableResult>> {
-        return await this.callFunc<JSONArrayOf<JSONObject>, JSONArrayOf<GetExecAggrTableResult>>('get_exec_aggr_table', [objectToJSONObject(param)]);
+    async get_exec_aggr_table(
+        param: GetExecAggrTableParam
+    ): Promise<Array<GetExecAggrTableResult>> {
+        return await this.callFunc<
+            JSONArrayOf<JSONObject>,
+            JSONArrayOf<GetExecAggrTableResult>
+        >('get_exec_aggr_table', [objectToJSONObject(param)]);
     }
 
-    async get_exec_aggr_stats(param: GetExecAggrStatsParam): Promise<Array<GetExecAggrStatsResult>> {
-        return await this.callFunc<JSONArrayOf<JSONObject>, JSONArrayOf<GetExecAggrStatsResult>>('get_exec_aggr_stats', [objectToJSONObject(param)]);
+    async get_exec_aggr_stats(
+        param: GetExecAggrStatsParam
+    ): Promise<Array<GetExecAggrStatsResult>> {
+        return await this.callFunc<
+            JSONArrayOf<JSONObject>,
+            JSONArrayOf<GetExecAggrStatsResult>
+        >('get_exec_aggr_stats', [objectToJSONObject(param)]);
     }
 }

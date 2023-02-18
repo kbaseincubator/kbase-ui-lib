@@ -1,20 +1,22 @@
-import {ServiceWizardClient, ServiceStatus} from '../coreServices/ServiceWizard';
-import {ServiceClient, ServiceClientParams} from './ServiceClient';
 import Cache from '../Cache';
-import {JSONValue} from '../../json';
-import {JSONRPCParams} from "./JSONRPC20";
+import {
+    ServiceStatus, ServiceWizardClient
+} from '../coreServices/ServiceWizard';
+import { ServiceClient, ServiceClientParams } from './ServiceClient';
+
+import { JSONValue } from 'json';
+import { JSONRPCParams } from './JSONRPC20';
 
 const ITEM_LIFETIME = 1800000;
 const MONITORING_FREQUENCY = 60000;
 const WAITER_TIMEOUT = 30000;
 const WAITER_FREQUENCY = 100;
 
-
 const moduleCache = new Cache<ServiceStatus>({
     itemLifetime: ITEM_LIFETIME,
     monitoringFrequency: MONITORING_FREQUENCY,
     waiterTimeout: WAITER_TIMEOUT,
-    waiterFrequency: WAITER_FREQUENCY
+    waiterFrequency: WAITER_FREQUENCY,
 });
 
 /*
@@ -42,8 +44,7 @@ export abstract class DynamicServiceClient extends ServiceClient {
 
     protected constructor(params: DynamicServiceClientParams) {
         super(params);
-        const {version} = params;
-
+        const { version } = params;
 
         this.version = version || null;
         if (this.version === 'auto') {
@@ -66,7 +67,7 @@ export abstract class DynamicServiceClient extends ServiceClient {
     private getCached(fetcher: () => Promise<ServiceStatus>) {
         return moduleCache.getItemWithWait({
             id: this.moduleId(),
-            fetcher: fetcher
+            fetcher: fetcher,
         });
     }
 
@@ -77,13 +78,13 @@ export abstract class DynamicServiceClient extends ServiceClient {
                 const client = new ServiceWizardClient({
                     url: this.serviceDiscoveryURL!,
                     token: this.token,
-                    timeout: this.timeout
+                    timeout: this.timeout,
                 });
                 // NB wrapped in promise.resolve because the promise we have
                 // here is bluebird, which supports cancellation, which we need.
                 return await client.get_service_status({
                     module_name: this.module,
-                    version: this.version
+                    version: this.version,
                 });
             }
         );
@@ -92,9 +93,11 @@ export abstract class DynamicServiceClient extends ServiceClient {
         return moduleInfo;
     }
 
-    async callFunc(funcName: string, params: JSONRPCParams): Promise<JSONValue> {
+    async callFunc(
+        funcName: string,
+        params: JSONRPCParams
+    ): Promise<JSONValue> {
         await this.lookupModule();
         return super.callFunc(funcName, params);
     }
 }
-

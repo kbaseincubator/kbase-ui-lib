@@ -1,4 +1,4 @@
-import { JSONObject } from '../../json';
+import { JSONObject } from 'json';
 import { ServiceClient } from '../JSONRPC11/ServiceClient';
 
 // types from module
@@ -22,7 +22,7 @@ export interface ServiceStatus {
 
 function isString(x: any, p: string): boolean {
     if (typeof x === 'object' && Reflect.has(x, p)) {
-        if (typeof ((Reflect.get(x, p) as unknown) as any) === 'string') {
+        if (typeof (Reflect.get(x, p) as unknown as any) === 'string') {
             return true;
         }
     }
@@ -31,7 +31,7 @@ function isString(x: any, p: string): boolean {
 
 function isNumber(x: any, p: string): boolean {
     if (typeof x === 'object' && Reflect.has(x, p)) {
-        if (typeof ((Reflect.get(x, p) as unknown) as any) === 'number') {
+        if (typeof (Reflect.get(x, p) as unknown as any) === 'number') {
             return true;
         }
     }
@@ -109,15 +109,22 @@ export class ServiceWizardClient extends ServiceClient {
     //     super(params);
     // }
 
-    async get_service_status(params: GetServiceStatusParams): Promise<GetServiceStatusResult> {
-        const [result] = await this.callFunc<Array<GetServiceStatusParams>, Array<GetServiceStatusResult>>('get_service_status', [params]);
+    async get_service_status(
+        params: GetServiceStatusParams
+    ): Promise<GetServiceStatusResult> {
+        const [result] = await this.callFunc<
+            Array<GetServiceStatusParams>,
+            Array<GetServiceStatusResult>
+        >('get_service_status', [params]);
         if (!result) {
             throw new Error('Crazy as it seems, result is falsy');
         }
         if (isGetServiceStatusResult(result)) {
             return result;
         } else {
-            throw new Error('Sorry, result does not conform to "GetServiceStatusResult"');
+            throw new Error(
+                'Sorry, result does not conform to "GetServiceStatusResult"'
+            );
         }
     }
 }

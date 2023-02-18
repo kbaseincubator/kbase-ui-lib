@@ -1,6 +1,6 @@
-import {JSONValue} from '../../json';
-import {ServiceClient, ServiceClientParams} from './ServiceClient';
-import {JSONRPCParams} from "./JSONRPC20";
+import { JSONValue } from 'json';
+import { JSONRPCParams } from './JSONRPC20';
+import { ServiceClient, ServiceClientParams } from './ServiceClient';
 
 export interface GenericClientConstructorParams extends ServiceClientParams {
     module: string;
@@ -14,7 +14,10 @@ export default class GenericClient extends ServiceClient {
         this.module = params.module;
     }
 
-    public async callMethod(method: string, params: JSONRPCParams): Promise<JSONValue> {
+    public async callMethod(
+        method: string,
+        params: JSONRPCParams
+    ): Promise<JSONValue> {
         return await this.callFunc(method, params);
     }
 }

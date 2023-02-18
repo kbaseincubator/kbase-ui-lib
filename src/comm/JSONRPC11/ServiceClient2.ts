@@ -1,24 +1,23 @@
 import { JSONArray } from 'json';
 import { JSONRPCClient } from './JSONRPC11';
 
-export interface ServiceClientParams {
+export interface ServiceClient2Params {
     url: string;
     timeout: number;
     token?: string;
 }
 
-export abstract class ServiceClient {
+export abstract class ServiceClient2 {
     abstract module: string;
     url: string;
     timeout: number;
     token?: string;
-    constructor({ url, timeout, token }: ServiceClientParams) {
+    constructor({ url, timeout, token }: ServiceClient2Params) {
         this.url = url;
         this.timeout = timeout;
         this.token = token;
     }
-
-    async callFunc<ParamType extends JSONArray, ReturnType extends JSONArray>(
+    async callFunc<ParamType extends JSONArray, ReturnType>(
         funcName: string,
         params: ParamType
     ): Promise<ReturnType> {
@@ -38,7 +37,6 @@ export abstract class ServiceClient {
 
         return result as unknown as ReturnType;
     }
-
     async callFuncEmptyResult<ParamType extends JSONArray>(
         funcName: string,
         params: ParamType
@@ -53,16 +51,10 @@ export abstract class ServiceClient {
             timeout: this.timeout,
         });
 
-        if (result !== null) {
-            if (Array.isArray(result) && result.length !== 0) {
-                throw new Error(
-                    `Too many (${result.length}) return values in return array`
-                );
-            } else {
-                throw new Error(
-                    `Unexpected type for a method with no results; expected "null", received ${typeof result}`
-                );
-            }
+        if (result.length !== 0) {
+            throw new Error(
+                `Too many (${result.length}) return values in return array`
+            );
         }
 
         return;

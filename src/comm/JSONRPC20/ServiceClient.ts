@@ -1,5 +1,5 @@
-import { JSONValue } from '../../json';
-import {JSONRPCClient, JSONRPCParams} from './JSONRPC20';
+import { JSONValue } from 'json';
+import { JSONRPCClient, JSONRPCParams } from './JSONRPC20';
 
 export interface ServiceClientParams {
     url: string;
@@ -14,14 +14,26 @@ export abstract class ServiceClient {
     timeout: number;
     token?: string;
     prefix?: boolean;
-    protected constructor({ url, timeout, token, prefix = true }: ServiceClientParams) {
+    protected constructor({
+        url,
+        timeout,
+        token,
+        prefix = true,
+    }: ServiceClientParams) {
         this.url = url;
         this.timeout = timeout;
         this.token = token;
         this.prefix = prefix;
     }
-    async callFunc(funcName: string, params?: JSONRPCParams): Promise<JSONValue> {
-        const client = new JSONRPCClient({ url: this.url, timeout: this.timeout, token: this.token });
+    async callFunc(
+        funcName: string,
+        params?: JSONRPCParams
+    ): Promise<JSONValue> {
+        const client = new JSONRPCClient({
+            url: this.url,
+            timeout: this.timeout,
+            token: this.token,
+        });
         const method = (() => {
             if (this.prefix) {
                 return `${this.module}.${funcName}`;
@@ -29,6 +41,8 @@ export abstract class ServiceClient {
                 return funcName;
             }
         })();
-        return await client.callMethod(method, params, { timeout: this.timeout });
+        return await client.callMethod(method, params, {
+            timeout: this.timeout,
+        });
     }
 }

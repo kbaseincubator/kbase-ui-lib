@@ -3,6 +3,12 @@
         "outDir": "./lib",
         "target": "es6",
         "module": "commonjs",
+        "lib": [
+            "esnext",
+            "dom",
+            "dom.iterable",
+        ],
+        "baseUrl": "src",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "noImplicitAny": true,

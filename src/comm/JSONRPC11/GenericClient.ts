@@ -1,4 +1,4 @@
-import {JSONArrayOf, JSONValue} from '../../json';
+import { JSONArrayOf, JSONValue } from 'json';
 import { ServiceClient, ServiceClientParams } from './ServiceClient';
 
 export type GenericClientParams = JSONArrayOf<JSONValue>;
@@ -16,7 +16,14 @@ export default class GenericClient extends ServiceClient {
         this.module = params.module;
     }
 
-    public async callMethod(method: string, params: GenericClientParams): Promise<GenericClientResult> {
-        return await this.callFunc<GenericClientParams, GenericClientResult>(method, params);
+    public async callMethod(
+        method: string,
+        params: GenericClientParams
+    ): Promise<GenericClientResult> {
+        const result = await this.callFunc<GenericClientParams, GenericClientResult>(
+            method,
+            params
+        );
+        return result;
     }
 }

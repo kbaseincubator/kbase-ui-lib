@@ -1,39 +1,32 @@
+// should be from @kbase/ui_lib
 export type SDKBoolean = 0 | 1;
+export type EpochTimeMS = number;
+export type Username = string;
+export type WSUPA = string;
 
 export type SampleNodeId = string;
-
 export type SampleId = string;
-
 export type SampleVersion = number;
-
-export type Username = string;
-
-export type EpochTimeMS = number;
-
 export type SampleNodeType = "BioReplicate" | "TechReplicate" | "SubSample";
 
-export type WSUPA = string;
-export type WorkspaceUniquePermanentAddress = WSUPA;
-
-// export interface UserMetadata {
-//     [k: string]: MetadataValue;
-// }
 
 export interface MetadataValue {
-    value: string | number | boolean;
+    value: string | number;
     units: string;
 }
-
 
 export interface Metadata {
     [key: string]: MetadataValue;
 }
 
-// TODO: interfaces for specific controlled metadata.
-// may not be practical, but consider it.
-// export interface ControlledMetadata {
-//     [k: string]: MetadataValue;
-// }
+export interface UserMetadataValue {
+    value: string;
+    unit: string;
+}
+
+export interface UserMetadata {
+    [key: string]: UserMetadataValue;
+}
 
 export type MetadataSource = Array<MetadataSourceField>;
 
@@ -50,7 +43,7 @@ export interface SampleNode {
     parent: SampleNodeId | null;
     type: SampleNodeType;
     meta_controlled: Metadata;
-    meta_user: Metadata;
+    meta_user: UserMetadata;
     source_meta: MetadataSource;
 }
 
@@ -61,8 +54,4 @@ export interface Sample {
     name: string;
     save_date: EpochTimeMS;
     version: SampleVersion;
-    // TODO: these fields don't yet exist upstream.
-    format_id: string;
-    format_version: number;
-    sample_set_ref: string;
 }

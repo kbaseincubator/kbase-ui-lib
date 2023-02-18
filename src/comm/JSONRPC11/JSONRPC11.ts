@@ -1,10 +1,10 @@
-import { v4 as uuid } from 'uuid';
-import { JSONArrayOf, JSONValue } from '../../json';
+import { JSONArrayOf, JSONValue } from 'json';
+import * as uuid from 'uuid';
 
 export interface JSONRPCRequestOptions {
-    func: string,
-    params: any,
-    timeout?: number,
+    func: string;
+    params: any;
+    timeout?: number;
     token?: string;
 }
 
@@ -16,17 +16,17 @@ export interface JSONRPCRequestOptions {
 
 // The entire JSON RPC request object
 export interface JSONRPCRequest {
-    method: string,
-    version: '1.1',
-    id: string,
-    params: Array<JSONValue>,
+    method: string;
+    version: '1.1';
+    id: string;
+    params: Array<JSONValue>;
     context?: any;
 }
 
 export interface JSONRPCErrorInfo {
-    code: string,
-    status?: number,
-    message: string,
+    code: string;
+    status?: number;
+    message: string;
     detail?: string;
     data?: any;
 }
@@ -49,7 +49,7 @@ export interface JSONRPCErrorInfo {
 // }
 
 export interface JSONRPCClientParams {
-    url: string,
+    url: string;
     timeout: number;
     token?: string;
 }
@@ -100,16 +100,23 @@ export class JSONRPCClient {
         this.token = token;
     }
 
-    protected makePayload(method: string, params: Array<JSONValue>): JSONPayload {
+    protected makePayload(
+        method: string,
+        params: Array<JSONValue>
+    ): JSONPayload {
         return {
             version: '1.1',
             method,
-            id: uuid(),
-            params
+            id: uuid.v4(),
+            params,
         };
     }
 
-    async callMethod(method: string, params: Array<JSONValue>, { timeout }: { timeout?: number; } = {}): Promise<JSONArrayOf<JSONValue>> {
+    async callMethod(
+        method: string,
+        params: Array<JSONValue>,
+        { timeout }: { timeout?: number } = {}
+    ): Promise<JSONArrayOf<JSONValue>> {
         const payload = this.makePayload(method, params);
         const headers = new Headers();
         headers.set('content-type', 'application/json');
@@ -122,7 +129,7 @@ export class JSONRPCClient {
         const response = await fetch(this.url, {
             method: 'POST',
             body: JSON.stringify(payload),
-            headers
+            headers,
         });
 
         const result = await (async () => {
@@ -135,26 +142,28 @@ export class JSONRPCClient {
                 throw new JSONRPC11Exception({
                     name: 'parse error',
                     code: 100,
-                    message: 'The response from the service could not be parsed',
+                    message:
+                        'The response from the service could not be parsed',
                     error: {
-                        originalMessage: ex.message,
-                        responseText
-                    }
+                        originalMessage:
+                            ex instanceof Error ? ex.message : 'Unknown error',
+                        responseText,
+                    },
                 });
             }
         })();
 
         if (result.hasOwnProperty('error')) {
-            const errorResult = (result as unknown) as JSONRPCResponseError;
+            const errorResult = result as unknown as JSONRPCResponseError;
             throw new JSONRPC11Exception({
                 name: errorResult.error.name,
                 code: errorResult.error.code,
                 message: errorResult.error.message,
-                error: errorResult.error.error
+                error: errorResult.error.error,
             });
         }
 
-        const rpcResponse = (result as unknown) as JSONRPCResponseResult;
+        const rpcResponse = result as unknown as JSONRPCResponseResult;
         return rpcResponse.result;
     }
 }

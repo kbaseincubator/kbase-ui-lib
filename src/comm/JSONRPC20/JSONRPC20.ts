@@ -1,37 +1,38 @@
-import { v4 as uuid } from 'uuid';
-import { JSONObject, JSONValue, JSONArray} from '../../json';
+// import { v4 as uuidv4 } from "https://deno.land/std@0.99.0/uuid/mod.ts";
+import { JSONArray, JSONObject, JSONValue } from 'json';
+import * as uuid from 'uuid';
 
 export interface JSONRPCRequestOptions {
-    func: string,
-    params: any,
-    timeout?: number,
+    func: string;
+    params: any;
+    timeout?: number;
     token?: string;
 }
 
 // The entire JSON RPC request object
 export interface JSONRPCRequest {
-    method: string,
-    jsonrpc: '2.0',
-    id: string,
-    params: Array<JSONValue>,
+    method: string;
+    jsonrpc: '2.0';
+    id: string;
+    params: Array<JSONValue>;
     context?: any;
 }
 
 export interface JSONRPCErrorInfo {
-    code: string,
-    status?: number,
-    message: string,
+    code: string;
+    status?: number;
+    message: string;
     detail?: string;
     data?: any;
 }
 
 export interface JSONRPCClientParams {
-    url: string,
+    url: string;
     timeout: number;
     token?: string;
 }
 
-export type JSONRPCParams = JSONArray | JSONObject
+export type JSONRPCParams = JSONArray | JSONObject;
 
 export interface JSONPayload {
     jsonrpc: string;
@@ -58,8 +59,8 @@ export class JSONRPC20Exception extends Error {
 }
 
 export interface JSONRPCResponseBase {
-    jsonrpc: '2.0',
-    id?: string
+    jsonrpc: '2.0';
+    id?: string;
 }
 
 export interface JSONRPCResponseResult extends JSONRPCResponseBase {
@@ -86,12 +87,16 @@ export class JSONRPCClient {
         return {
             jsonrpc: '2.0',
             method,
-            id: uuid(),
-            params
+            id: uuid.v4(),
+            params,
         };
     }
 
-    async callMethod(method: string, params?: JSONRPCParams, { timeout }: { timeout?: number; } = {}): Promise<JSONValue> {
+    async callMethod(
+        method: string,
+        params?: JSONRPCParams,
+        { timeout }: { timeout?: number } = {}
+    ): Promise<JSONValue> {
         const payload = this.makePayload(method, params);
         const headers = new Headers();
         headers.set('content-type', 'application/json');
@@ -104,7 +109,7 @@ export class JSONRPCClient {
         const response = await fetch(this.url, {
             method: 'POST',
             body: JSON.stringify(payload),
-            headers
+            headers,
         });
 
         const rpcResponse = await (async () => {
@@ -117,11 +122,13 @@ export class JSONRPCClient {
                 throw new JSONRPC20Exception({
                     name: 'parse error',
                     code: 100,
-                    message: 'The response from the service could not be parsed',
+                    message:
+                        'The response from the service could not be parsed',
                     error: {
-                        originalMessage: ex.message,
-                        responseText
-                    }
+                        originalMessage:
+                            ex instanceof Error ? ex.message : 'Unknown error',
+                        responseText,
+                    },
                 });
             }
         })();
@@ -131,7 +138,7 @@ export class JSONRPCClient {
                 name: rpcResponse.error.name,
                 code: rpcResponse.error.code,
                 message: rpcResponse.error.message,
-                error: rpcResponse.error.error
+                error: rpcResponse.error.error,
             });
         }
 
