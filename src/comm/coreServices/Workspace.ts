@@ -287,14 +287,30 @@ export interface AlterWorkspaceMetadataParams extends JSONLikeObject {
     remove?: Array<string>;
 }
 
+export type VerResult = string;
+
+export interface StatusDependency extends JSONLikeObject {
+    name: string;
+    state: string;
+    message: string;
+    version: string;
+}
+export interface StatusResult extends JSONLikeObject {
+    state: string;
+    message: string;
+    dependencies: Array<StatusDependency>
+    version: string;
+    git_url: string;
+    freemem: number;
+    totalmem: number;
+    maxmem: number;
+}
+
 export default class WorkspaceClient extends ServiceClient {
     module = 'Workspace';
 
     // TODO: should be void not null
-    async ver(): Promise<string> {
-        const [result] = await this.callFunc<[null], [string]>('ver', [null]);
-        return result;
-    }
+
 
     async get_object_info3(
         params: GetObjectInfo3Params
@@ -357,9 +373,17 @@ export default class WorkspaceClient extends ServiceClient {
         );
     }
 
-    async status(): Promise<void> {
-        await this.callFuncEmptyResult<[]>(
-            'ver', []
+    async ver(): Promise<VerResult> {
+        const [res] = await this.callFuncNoParams<[JSONValue]>(
+            'var'
         )
+        return res as VerResult;
+    }
+
+    async status(): Promise<StatusResult> {
+        const [res] = await this.callFuncNoParams<[JSONValue]>(
+            'status'
+        )
+        return res as StatusResult;
     }
 }
