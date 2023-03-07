@@ -1,7 +1,6 @@
-import {WindowChannel, WindowChannelInit} from './windowChannel';
+import { WindowChannelInit } from './windowChannel';
 
-import {isSimpleObject} from "./simpleObject";
-import {waitFor} from "@testing-library/dom";
+import { isSimpleObject } from "./simpleObject";
 
 function isEqual(v1: any, v2: any) {
     const t1 = typeof v1;
@@ -60,7 +59,7 @@ function isEqual(v1: any, v2: any) {
 const WAIT_FOR_TIME = 5000;
 const WAIT_FOR_INTERVAL = 50;
 
-function myWaitFor(pred: () => boolean, timeout=WAIT_FOR_TIME): Promise<void> {
+function myWaitFor(pred: () => boolean, timeout = WAIT_FOR_TIME): Promise<void> {
     const started = Date.now();
     return new Promise((resolve, reject) => {
         function loop() {
@@ -95,26 +94,26 @@ test('Window Channel create, send, receive simple message', async () => {
     expect(chan2.getPartnerId()).toEqual(chan1Init.getId());
 
     expect(chan1.getStats()).toEqual({
-        sent:0, received:0, ignored: 0
+        sent: 0, received: 0, ignored: 0
     });
 
     expect(chan2.getStats()).toEqual({
-        sent:0, received:0, ignored: 0
+        sent: 0, received: 0, ignored: 0
     });
 
     let result: any;
     chan1.on('greeting', (message: any) => {
         result = message;
     });
-    const payload = {hello: 'hi'};
+    const payload = { hello: 'hi' };
     chan2.send('greeting', payload);
     await myWaitFor(() => {
         return isEqual(result, payload);
     });
 
-     expect(chan1.getStats()).toEqual({
+    expect(chan1.getStats()).toEqual({
         sent: 0, received: 1, ignored: 0
-     });
+    });
 
     expect(chan2.getStats()).toEqual({
         sent: 1, received: 0, ignored: 1
@@ -140,8 +139,8 @@ test('Send a message as a promise', async () => {
     chan1.on('query', (message: any) => {
         return 'bar';
     });
-    const payload = {name: 'foo'};
-    const response  = await chan2.request('query', payload);
+    const payload = { name: 'foo' };
+    const response = await chan2.request('query', payload);
     expect(response).toEqual('bar');
     chan1.stop();
     chan2.stop();
@@ -158,7 +157,7 @@ test('Window Channel create, send, receive SINGLE message', async () => {
     chan1.once('greeting', (message: any) => {
         result = message;
     });
-    const payload = {hello: 'hi'};
+    const payload = { hello: 'hi' };
     chan2.send('greeting', payload);
     await myWaitFor(() => {
         return isEqual(result, payload);
@@ -174,7 +173,7 @@ test('Window Channel create, send, receive SINGLE message', async () => {
     const chan1 = chan1Init.makeChannel(chan2Init.getId()).start();
     const chan2 = chan2Init.makeChannel(chan1Init.getId()).start();
 
-    const payload = {hello: 'hi'};
+    const payload = { hello: 'hi' };
     setTimeout(() => {
         chan2.send('greeting', payload);
     }, 0);
@@ -198,7 +197,7 @@ test('Window Channel create, send, receive simple message', async () => {
     const chan1 = chan1Init.makeChannel(chan2Init.getId());
 
     expect(() => {
-        chan1.send('greeting', {hello: 'hi'});
+        chan1.send('greeting', { hello: 'hi' });
     }).toThrow(Error);
 });
 
@@ -213,7 +212,7 @@ test('Window Channel create, send bad message', async () => {
     const chan2 = chan2Init.makeChannel(chan1Init.getId()).start();
 
     window.postMessage(null, window.location.origin);
-    window.postMessage({hi: 'there'}, window.location.origin);
+    window.postMessage({ hi: 'there' }, window.location.origin);
     window.postMessage(true, window.location.origin);
     window.postMessage(false, window.location.origin);
     window.postMessage(undefined, window.location.origin);
@@ -229,11 +228,11 @@ test('Window Channel create, send bad message', async () => {
     // Now we check the stats.
     expect(chan1.getStats()).toEqual({
         sent: 0, received: 0, ignored: 7
-     });
+    });
 
     expect(chan2.getStats()).toEqual({
         sent: 0, received: 0, ignored: 7
-     });
+    });
 
     chan1.stop();
     chan2.stop();
@@ -255,7 +254,7 @@ test('Send a request, handler generates exception', async () => {
     chan1.on('query', (message: any) => {
         throw new Error('Oops!');
     });
-    const payload = {name: 'foo'};
+    const payload = { name: 'foo' };
     await expect(async () => {
         try {
             return await chan2.request('query', payload);
@@ -281,7 +280,7 @@ test('Window Channel create, send, receive message with error', async () => {
     }, (err: Error) => {
         error = err;
     });
-    const payload = {hello: 'hi'};
+    const payload = { hello: 'hi' };
     chan2.send('greeting', payload);
 
     await myWaitFor(() => {
@@ -302,14 +301,15 @@ test('Window Channel create, send, receive SINGLE message with error', async () 
 
     const chan1 = chan1Init.makeChannel(chan2Init.getId()).start();
     const chan2 = chan2Init.makeChannel(chan1Init.getId()).start();
+    const timeout = 1000;
 
     let error: Error | null = null;
-    chan1.once('greeting', (message: any) => {
+    chan1.once('greeting', timeout, (message: any) => {
         throw new Error('Whoopsie!');
     }, (err: Error) => {
         error = err;
     });
-    const payload = {hello: 'hi'};
+    const payload = { hello: 'hi' };
     chan2.send('greeting', payload);
 
     await myWaitFor(() => {
@@ -331,7 +331,7 @@ test('Cannot send unless start first', async () => {
     const chan1 = chan1Init.makeChannel(chan2Init.getId());
     const chan2 = chan2Init.makeChannel(chan1Init.getId());
 
-    const payload = {hello: 'hi'};
+    const payload = { hello: 'hi' };
     expect(() => {
         chan2.send('greeting', payload);
     }).toThrow();
@@ -344,6 +344,6 @@ test('Cannot request unless start first', async () => {
     const chan1 = chan1Init.makeChannel(chan2Init.getId());
     const chan2 = chan2Init.makeChannel(chan1Init.getId());
 
-    const payload = {hello: 'hi'};
+    const payload = { hello: 'hi' };
     await expect(chan2.request('greeting', payload)).rejects.toThrow();
 });
