@@ -447,11 +447,12 @@ export class WindowChannel {
         }
     }
 
-    once(name: string, callback: (payload: Payload) => void, onError?: (error: Error) => void) {
+    once(name: string, timeout: number, callback: (payload: Payload) => void, onError?: (error: Error) => void) {
         this.listenOnce(
             new WaitingListener({
                 name: name,
                 callback,
+                timeout,
                 onError: (error: Error) => {
                     if (onError) {
                         onError(error);
