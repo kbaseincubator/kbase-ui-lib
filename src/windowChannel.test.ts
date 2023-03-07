@@ -152,9 +152,10 @@ test('Window Channel create, send, receive SINGLE message', async () => {
 
     const chan1 = chan1Init.makeChannel(chan2Init.getId()).start();
     const chan2 = chan2Init.makeChannel(chan1Init.getId()).start();
+    const timeout = 1000;
 
     let result: any;
-    chan1.once('greeting', (message: any) => {
+    chan1.once('greeting', timeout, (message: any) => {
         result = message;
     });
     const payload = { hello: 'hi' };
