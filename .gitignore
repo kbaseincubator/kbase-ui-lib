@@ -1,6 +1,7 @@
 node_modules
-coverage
+/coverage
 api-docs
-_attic
+/_attic
 /lib
-build
+.idea
+.vscode
